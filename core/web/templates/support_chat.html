@@ -1,198 +1,62 @@
-<!-- Шаблон страницы чата с поддержкой -->
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Чат с поддержкой - PlayTrade</title>
-    <link href="https://share.google/m8Z4fEOpFC085bDxg" rel="stylesheet">
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(45deg, #667eea, #764ba2, #a044ff, #6c5ce7);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
-            color: white;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
-        }
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        .navbar {
-            background: rgba(255, 255, 255, 0.1) !important;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        .navbar .container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .navbar-brand {
-            font-weight: bold;
-            color: #ffd700 !important;
-            text-shadow: 0 0 20px #ffd700, 0 0 40px #ffd700;
-            margin-right: 2rem;
-            font-size: 1.5rem;
-            text-decoration: none !important;
-        }
-        .nav-tabs {
-            display: flex;
-            gap: 2rem;
-        }
-        .nav-tabs .nav-link {
-            color: #ffd700;
-            text-shadow: 0 0 20px #ffd700, 0 0 40px #ffd700;
-            border: none;
-            font-weight: 500;
-            text-decoration: none !important;
-        }
-        .chat-container {
-            max-width: 800px;
-            margin: 50px auto;
-            padding: 30px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            box-shadow: 0 0 30px rgba(0,0,0,0.4);
-            backdrop-filter: blur(10px);
-        }
-        .chat-title {
-            font-size: 3rem;
-            color: #ffd700;
-            text-shadow: 0 0 20px #ffd700, 0 0 40px #ffd700;
-            text-align: center;
-            margin-bottom: 30px;
-            font-weight: bold;
-        }
-        .chat-messages {
-            height: 400px;
-            overflow-y: auto;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-        .message {
-            margin-bottom: 15px;
-            padding: 10px;
-            border-radius: 10px;
-        }
-        .message.support {
-            background: rgba(255, 215, 0, 0.2);
-            text-align: left;
-        }
-        .message.user {
-            background: rgba(40, 167, 69, 0.2);
-            text-align: right;
-        }
-        .message strong {
-            color: #ffd700;
-        }
-        .message p {
-            margin: 5px 0 0 0;
-            color: white;
-        }
-        .chat-form {
-            display: flex;
-            gap: 10px;
-        }
-        .chat-form textarea {
-            flex: 1;
-            padding: 10px;
-            border: 1px solid rgba(255,255,255,0.3);
-            border-radius: 5px;
-            background: rgba(255,255,255,0.1);
-            color: white;
-            resize: vertical;
-            min-height: 60px;
-        }
-        .chat-form textarea::placeholder {
-            color: rgba(255,255,255,0.7);
-        }
-        .btn {
-            padding: 12px 25px;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: bold;
-            color: white;
-            background: linear-gradient(45deg, #28a745, #20c997);
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 1.1rem;
-        }
-        .btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
-        }
-        .back-btn {
-            background: linear-gradient(45deg, #6c757d, #5a6268);
-            margin-top: 20px;
-        }
-        main {
-            padding-bottom: 120px;
-        }
-    </style>
-</head>
-<body>
-    <header class="bg-white shadow-sm">
-        <nav class="navbar navbar-expand-lg navbar-light">
-            <div class="container">
-                <a class="navbar-brand" href="/">PlayTrade</a>
-                <ul class="nav nav-tabs">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/catalog/">Каталог</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/docs/">Документация</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-    </header>
 
-    <main class="chat-container">
-        <h1 class="chat-title">Чат с поддержкой</h1>
+{% block title %}Чат с поддержкой - PlayTrade{% endblock %}
+{% block body_class %}animated-bg{% endblock %}
 
-        <div class="chat-messages" id="chat-messages">
-            {% for message in messages %}
-                <div class="message {% if message.is_support %}support{% else %}user{% endif %}">
-                    <strong>{{ message.display_name }}:</strong>
-                    <p>{{ message.message }}</p>
-                </div>
-            {% endfor %}
+{% block content %}
+<div class="chat-container">
+    <h1 class="title-gold text-center mb-6">💬 Чат с поддержкой</h1>
+
+    <!-- Chat Messages -->
+    <div class="chat-messages" id="chat-messages">
+        {% for message in messages %}
+        <div class="message {% if message.is_support %}support{% else %}user{% endif %}">
+            <strong>{{ message.display_name }}:</strong>
+            <p>{{ message.message }}</p>
+            <small style="opacity: 0.6;">{{ message.timestamp|date:"H:i" }}</small>
         </div>
-
-        <div style="text-align: center; margin: 20px 0;">
-            <a href="?new_chat=true" class="btn" style="background: linear-gradient(45deg, #dc3545, #c82333);">
-                🆕 Начать новый чат
-            </a>
-            <small class="d-block mt-2" style="color: rgba(255,255,255,0.7);">
-                Старый диалог будет полностью удален
-            </small>
+        {% empty %}
+        <div class="text-center p-4">
+            <p class="text-white">Начните диалог с поддержкой</p>
         </div>
+        {% endfor %}
+    </div>
 
-        <form method="post" class="chat-form">
-            {% csrf_token %}
-            <textarea name="message" placeholder="Введите ваше сообщение..." required></textarea>
-            <button type="submit" class="btn">Отправить</button>
-        </form>
+    <!-- New Chat Button -->
+    <div class="text-center mb-4">
+        <a href="?new_chat=true" class="btn btn-danger btn-sm" onclick="return confirm('Удалить текущий диалог и начать новый?')">
+            🆕 Начать новый чат
+        </a>
+        <small class="d-block mt-2" style="color: rgba(255,255,255,0.6);">
+            Старый диалог будет удалён
+        </small>
+    </div>
 
-        <div style="text-align: center; margin-top: 30px;">
-            <a href="/catalog/" class="btn back-btn">Вернуться в каталог</a>
-        </div>
-    </main>
+    <!-- Message Form -->
+    <form method="post" class="chat-form">
+        {% csrf_token %}
+        <textarea name="message" placeholder="Введите ваше сообщение..." required rows="3"></textarea>
+        <button type="submit" class="btn btn-success">📤 Отправить</button>
+    </form>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Scroll to bottom of chat
-        const chatMessages = document.getElementById('chat-messages');
+    <!-- Back Button -->
+    <div class="text-center mt-6">
+        <a href="{% url 'catalog' %}" class="btn btn-secondary">
+            ← Вернуться в каталог
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Auto-scroll to bottom
+document.addEventListener('DOMContentLoaded', function() {
+    const chatMessages = document.getElementById('chat-messages');
+    if (chatMessages) {
         chatMessages.scrollTop = chatMessages.scrollHeight;
-    </script>
-</body>
-</html>
+    }
+});
+</script>
+{% endblock %}
