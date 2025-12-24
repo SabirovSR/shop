@@ -1,0 +1,784 @@
+<!-- Шаблон страницы каталога игр -->
+{% load static %}
+{% load custom_filters %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Каталог игр - PlayTrade</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-attachment: fixed;
+            font-family: 'Roboto', sans-serif;
+            min-height: 100vh;
+        }
+        .navbar {
+            background: rgba(255, 255, 255, 0.1) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+        .navbar-brand {
+            background: linear-gradient(45deg, #ffff00, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: bold;
+            text-shadow: 0 0 10px #ffff00, 0 0 20px #ffff00, 0 0 30px #ffff00;
+        }
+        .product-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            height: 100%;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+            border-color: rgba(255, 107, 53, 0.5);
+        }
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        .product-card:hover .product-image {
+            transform: scale(1.05);
+        }
+        .product-info {
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .product-title {
+            font-size: 16px;
+            font-weight: 600;
+            background: linear-gradient(45deg, #fff, #f0f0f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .product-meta {
+            font-size: 12px;
+            color: #e0e0e0;
+            margin-bottom: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 4px 8px;
+            border-radius: 12px;
+            display: inline-block;
+        }
+        .product-seller {
+            font-size: 11px;
+            color: #b0b0b0;
+            margin-bottom: 8px;
+            font-style: italic;
+        }
+        .product-rating {
+            color: #ffd700;
+            font-size: 14px;
+            margin-bottom: 8px;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+        .product-price {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .current-price {
+            font-size: 20px;
+            font-weight: 700;
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .old-price {
+            font-size: 16px;
+            color: #ff9999;
+            text-decoration: line-through;
+            opacity: 0.7;
+        }
+        .btn-cart {
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+            width: 100%;
+            margin-top: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+        }
+        .btn-cart:hover {
+            background: linear-gradient(45deg, #e55a2b, #e8851a);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+        }
+        .filters-sidebar {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .filter-group {
+            margin-bottom: 24px;
+        }
+        .filter-group h5 {
+            font-size: 16px;
+            font-weight: 600;
+            background: linear-gradient(45deg, #fff, #e0e0e0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 12px;
+        }
+        .filter-checkbox {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 8px;
+            border-radius: 8px;
+            transition: background 0.3s ease;
+            background: rgba(255, 255, 255, 0.05); /* Полупрозрачный темный фон */
+            border: 1px solid rgba(255, 255, 255, 0.1); /* Тонкая граница */
+        }
+        .filter-checkbox:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        .filter-checkbox input {
+            margin-right: 10px;
+            accent-color: #ff6b35; /* Цвет чекбокса */
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        .filter-checkbox label {
+            color: #fff; /* Белый текст */
+            cursor: pointer;
+            font-size: 14px;
+            flex-grow: 1;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+        }
+        /* Стили для подсчета игр в жанре */
+        .genre-count {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffd700; /* Золотой цвет для чисел */
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 5px;
+            min-width: 24px;
+            text-align: center;
+            display: inline-block;
+        }
+        /* Заголовок жанров */
+        #genres-toggle {
+            color: #ffd700; /* Золотой цвет заголовка */
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+            font-size: 18px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: block;
+        }
+        #genres-content {
+            background: rgba(0, 0, 0, 0.2); /* Темный фон для контента */
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+        .price-range {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .price-range input {
+            flex: 0 0 40px;
+            padding: 8px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+        .price-range input:first-child {
+            flex: 0 0 80px;
+        }
+        .price-range input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        .sort-controls {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 16px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+        .sort-controls select, .sort-controls input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            color: #fff;
+            padding: 8px 12px;
+        }
+        .sort-controls select option {
+            background: #333;
+            color: #fff;
+        }
+        .pagination {
+            justify-content: center;
+            margin-top: 40px;
+        }
+        .pagination .page-link {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #fff;
+            border-radius: 8px;
+            margin: 0 2px;
+            transition: all 0.3s ease;
+        }
+        .pagination .page-link:hover {
+            background: rgba(255, 107, 53, 0.3);
+            border-color: #ff6b35;
+        }
+        .pagination .page-item.active .page-link {
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            border-color: #ff6b35;
+        }
+        .badge {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            font-size: 10px;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        .badge.bg-danger {
+            background: linear-gradient(45deg, #ff4757, #ff3838) !important;
+        }
+        .badge.bg-success {
+            background: linear-gradient(45deg, #2ed573, #1e90ff) !important;
+        }
+        .badge.bg-warning {
+            background: linear-gradient(45deg, #ffa502, #ff6348) !important;
+        }
+        .rating-stars {
+            display: flex;
+            gap: 2px;
+        }
+        .star {
+            font-size: 18px;
+            color: #ddd;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        .star:hover, .star.active, .star.filled {
+            color: #ffd700;
+        }
+        /* Стили для ссылки на отзыв */
+        .rating-link {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s ease;
+        }
+        .rating-link:hover {
+            transform: scale(1.05);
+        }
+        .rating-link:hover .star {
+            color: #ffd700;
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+        }
+        .rating-stars-display {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+        .rating-stars-display .star {
+            font-size: 18px;
+            transition: all 0.2s ease;
+        }
+        .rating-stars-display .rating-value {
+            margin-left: 5px;
+            font-size: 14px;
+            color: #ccc;
+        }
+        .review-hint {
+            display: block;
+            font-size: 11px;
+            color: #aaa;
+            margin-top: 4px;
+            transition: all 0.3s ease;
+        }
+        .rating-link:hover .review-hint {
+            color: #ffd700;
+        }
+        .product-image-container {
+            position: relative;
+        }
+        .container-fluid {
+            padding: 20px;
+        }
+        .row {
+            margin: 0;
+        }
+        .col-lg-3, .col-lg-9, .col-md-4, .col-md-8 {
+            padding: 0 10px;
+        }
+        @media (max-width: 768px) {
+            .filters-sidebar {
+                margin-bottom: 20px;
+            }
+            .sort-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .container-fluid {
+                padding: 10px;
+            }
+        }
+        /* Анимации */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .product-card {
+            animation: fadeInUp 0.6s ease-out;
+        }
+        .product-card:nth-child(odd) {
+            animation-delay: 0.1s;
+        }
+        .product-card:nth-child(even) {
+            animation-delay: 0.2s;
+        }
+
+    </style>
+</head>
+<body
+    {% if is_logged_in %}class="logged-in"{% endif %}
+    data-user-type="{{ user_type|default:'guest' }}"
+    data-user-id="{{ request.session.user_id|default:0 }}">
+    <!-- CSRF токен для AJAX запросов -->
+    {% csrf_token %}
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="/">PlayTrade</a>
+            <div class="d-flex align-items-center">
+                {% if is_logged_in %}
+                    <a href="/account/" class="btn btn-warning me-2 d-flex align-items-center" style="border-width: 2px;">
+                        {% if user.avatar %}
+                            <img src="{{ user.avatar.url }}" alt="Аватар" style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover; margin-right: 8px;">
+                        {% endif %}
+                        Аккаунт
+                    </a>
+                    {% if user_type == 'buy' %}
+                        <a href="/cart/" class="btn btn-warning me-2">🛒 Корзина</a>
+                    {% endif %}
+                    {% if user_type == 'sell' %}
+                        <a href="/add-game/" class="btn btn-success">➕ Добавить игру</a>
+                    {% endif %}
+                {% else %}
+                    <a href="/register/" class="btn btn-primary">Регистрация / Вход</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid mt-3">
+        {% if not is_logged_in %}
+            <!-- Форма входа/регистрации -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card" style="background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2);">
+                        <div class="card-body">
+                            <h5 class="card-title text-white">Войдите или зарегистрируйтесь, чтобы добавлять игры в корзину</h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h6 class="text-white">Регистрация</h6>
+                                    <form method="post">
+                                        {% csrf_token %}
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <input type="text" name="username" class="form-control mb-2" placeholder="Имя пользователя" required>
+                                                <input type="email" name="email" class="form-control mb-2" placeholder="Email" required>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input type="password" name="password" class="form-control mb-2" placeholder="Пароль" required>
+                                                <input type="tel" name="phone" class="form-control mb-2" placeholder="Телефон" required>
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+                                    </form>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6 class="text-white">Вход</h6>
+                                    <form method="post">
+                                        {% csrf_token %}
+                                        <input type="text" name="login_username" class="form-control mb-2" placeholder="Имя пользователя" required>
+                                        <input type="password" name="login_password" class="form-control mb-2" placeholder="Пароль" required>
+                                        <button type="submit" class="btn btn-success">Войти</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        <form method="get" id="filter-form">
+        <div class="row">
+            <!-- Фильтры слева -->
+            <div class="col-lg-3 col-md-4">
+                <div class="filters-sidebar">
+                    <h4>Фильтры</h4>
+                    <form method="get" id="filter-form">
+
+                    <!-- Жанры -->
+                    <div class="filter-group">
+                        <div class="dropdown">
+                            <button class="btn btn-outline-light dropdown-toggle" type="button" id="genres-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="false" style="width: 100%; color: #ffd700; border-color: rgba(255,215,0,0.5); background: rgba(255,255,255,0.1);">
+                                Жанры 
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="genres-toggle" style="width: 100%; background: rgba(0,0,0,0.9); border: 1px solid rgba(255,215,0,0.3); padding: 10px 0; max-height: 300px; overflow-y: auto;">
+                                <div style="padding: 5px 15px; color: white; cursor: pointer; transition: background 0.3s;" onmouseover="this.style.background='rgba(255,215,0,0.1)'" onmouseout="this.style.background='transparent'">
+                                    <label style="cursor: pointer; width: 100%; margin: 0;"><input type="checkbox" name="genre" value="Экшен" style="margin-right: 8px;"> Экшен <span style="color: rgba(255,215,0,0.7); float: right;">({{ genre_counts.Экшен }})</span></label>
+                                </div>
+                                <div style="padding: 5px 15px; color: white; cursor: pointer; transition: background 0.3s;" onmouseover="this.style.background='rgba(255,215,0,0.1)'" onmouseout="this.style.background='transparent'">
+                                    <label style="cursor: pointer; width: 100%; margin: 0;"><input type="checkbox" name="genre" value="Приключения" style="margin-right: 8px;"> Приключения <span style="color: rgba(255,215,0,0.7); float: right;">({{ genre_counts.Приключения }})</span></label>
+                                </div>
+                                <div style="padding: 5px 15px; color: white; cursor: pointer; transition: background 0.3s;" onmouseover="this.style.background='rgba(255,215,0,0.1)'" onmouseout="this.style.background='transparent'">
+                                    <label style="cursor: pointer; width: 100%; margin: 0;"><input type="checkbox" name="genre" value="RPG" style="margin-right: 8px;"> RPG <span style="color: rgba(255,215,0,0.7); float: right;">({{ genre_counts.RPG }})</span></label>
+                                </div>
+                                <div style="padding: 5px 15px; color: white; cursor: pointer; transition: background 0.3s;" onmouseover="this.style.background='rgba(255,215,0,0.1)'" onmouseout="this.style.background='transparent'">
+                                    <label style="cursor: pointer; width: 100%; margin: 0;"><input type="checkbox" name="genre" value="Стратегия" style="margin-right: 8px;"> Стратегия <span style="color: rgba(255,215,0,0.7); float: right;">({{ genre_counts.Стратегия }})</span></label>
+                                </div>
+                                <div style="padding: 5px 15px; color: white; cursor: pointer; transition: background 0.3s;" onmouseover="this.style.background='rgba(255,215,0,0.1)'" onmouseout="this.style.background='transparent'">
+                                    <label style="cursor: pointer; width: 100%; margin: 0;"><input type="checkbox" name="genre" value="Симулятор" style="margin-right: 8px;"> Симулятор <span style="color: rgba(255,215,0,0.7); float: right;">({{ genre_counts.Симулятор }})</span></label>
+                                </div>
+                                <div style="padding: 5px 15px; color: white; cursor: pointer; transition: background 0.3s;" onmouseover="this.style.background='rgba(255,215,0,0.1)'" onmouseout="this.style.background='transparent'">
+                                    <label style="cursor: pointer; width: 100%; margin: 0;"><input type="checkbox" name="genre" value="Спорт" style="margin-right: 8px;"> Спорт <span style="color: rgba(255,215,0,0.7); float: right;">({{ genre_counts.Спорт }})</span></label>
+                                </div>
+                                <div style="padding: 5px 15px; color: white; cursor: pointer; transition: background 0.3s;" onmouseover="this.style.background='rgba(255,215,0,0.1)'" onmouseout="this.style.background='transparent'">
+                                    <label style="cursor: pointer; width: 100%; margin: 0;"><input type="checkbox" name="genre" value="Гонки" style="margin-right: 8px;"> Гонки <span style="color: rgba(255,215,0,0.7); float: right;">({{ genre_counts.Гонки }})</span></label>
+                                </div>
+                                <div style="padding: 5px 15px; color: white; cursor: pointer; transition: background 0.3s;" onmouseover="this.style.background='rgba(255,215,0,0.1)'" onmouseout="this.style.background='transparent'">
+                                    <label style="cursor: pointer; width: 100%; margin: 0;"><input type="checkbox" name="genre" value="Головоломки" style="margin-right: 8px;"> Головоломки <span style="color: rgba(255,215,0,0.7); float: right;">({{ genre_counts.Головоломки }})</span></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Цена -->
+                    <div class="filter-group">
+                        <h5>Цена</h5>
+                        <select name="price_range" id="price_range" class="form-select">
+                            <option value="" {% if not price_range %}selected{% endif %}>Любая цена</option>
+                            <option value="0-1000" {% if price_range == '0-1000' %}selected{% endif %}>До 1000 ₽</option>
+                            <option value="1000-5000" {% if price_range == '1000-5000' %}selected{% endif %}>1000 - 5000 ₽</option>
+                            <option value="5000-10000" {% if price_range == '5000-10000' %}selected{% endif %}>5000 - 10000 ₽</option>
+                            <option value="10000-999999" {% if price_range == '10000-999999' %}selected{% endif %}>Более 10000 ₽</option>
+                        </select>
+                    </div>
+
+                    <!-- Рейтинг -->
+                    <div class="filter-group">
+                    </div>
+
+                    <!-- Наличие -->
+                    <div class="filter-group">
+                        <h5>Наличие</h5>
+                        <div class="filter-checkbox">
+                            <input type="checkbox" name="in_stock" id="in_stock" value="true" {% if in_stock == 'true' %}checked{% endif %}>
+                            <label for="in_stock">В наличии</label>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="apply_filters" class="btn btn-primary w-100">Показать</button>
+                    <a href="/catalog/" class="btn btn-outline-secondary w-100 mt-2">Сбросить все фильтры</a>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Основной контент -->
+            <div class="col-lg-9 col-md-8">
+                <!-- Поиск и сортировка -->
+                <div class="sort-controls">
+                    <div class="d-flex align-items-center gap-3">
+                        <input type="text" name="search" id="search" class="form-control" placeholder="Поиск игр..." value="{{ search }}" style="max-width: 300px;">
+                        <div class="dark-select-wrapper" style="max-width: 200px;">
+                            <select name="sort" id="sort" class="dark-select">
+                                <option value="popularity" {% if sort == 'popularity' %}selected{% endif %}>По популярности</option>
+                                <option value="price_asc" {% if sort == 'price_asc' %}selected{% endif %}>Цена: по возрастанию</option>
+                                <option value="price_desc" {% if sort == 'price_desc' %}selected{% endif %}>Цена: по убыванию</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        Показано {{ page_obj.start_index }}-{{ page_obj.end_index }} из {{ page_obj.paginator.count }} товаров
+                    </div>
+                </div>
+
+                <!-- Сетка товаров -->
+                <div class="row g-3" id="products-grid">
+                    {% for game in games %}
+                        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6">
+                            <div class="product-card">
+                                <div class="product-image-container">
+                                    {% if game.image %}
+                                        <img src="{{ game.image.url }}" alt="{{ game.title }}" class="product-image">
+                                    {% else %}
+                                        <img src="{% static 'web/images/game_placeholder.jpg' %}" alt="{{ game.title }}" class="product-image">
+                                    {% endif %}
+                                    {% if game.is_discount %}
+                                        <span class="badge bg-danger">Скидка</span>
+                                    {% endif %}
+                                    {% if game.is_new %}
+                                        <span class="badge bg-success">Новинка</span>
+                                    {% endif %}
+                                    {% if game.is_bestseller %}
+                                        <span class="badge bg-warning text-dark">Хит</span>
+                                    {% endif %}
+                                    {% if game.in_stock %}
+                                        <span class="badge bg-info">В наличии</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">Нет в наличии</span>
+                                    {% endif %}
+                                </div>
+                                <div class="product-info">
+                                    <div class="product-title">{{ game.title }}</div>
+                                    <div class="product-meta">{{ game.genre.name }}</div>
+                                    <div class="product-seller">Продавец: {{ game.seller_name|default:"Неизвестен" }}</div>
+                                    <div class="product-rating">
+                                        {% if is_logged_in and user_type == 'buy' %}
+                                            <a href="/leave-review/{{ game.id }}/" class="rating-link" title="Нажмите, чтобы оставить отзыв">
+                                                <div class="rating-stars-display">
+                                                    {% for i in "12345" %}
+                                                        {% if forloop.counter <= game.rating %}
+                                                            <span class="star filled">★</span>
+                                                        {% else %}
+                                                            <span class="star">☆</span>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    <span class="rating-value">({{ game.rating }})</span>
+                                                </div>
+                                                <span class="review-hint">✍ Оставить отзыв</span>
+                                            </a>
+                                        {% else %}
+                                            {% for i in "12345" %}
+                                                {% if forloop.counter <= game.rating %}
+                                                    ★
+                                                {% else %}
+                                                    ☆
+                                                {% endif %}
+                                            {% endfor %}
+                                            ({{ game.rating }})
+                                        {% endif %}
+                                    </div>
+                                    <div class="product-price">
+                                        <span class="current-price">{{ game.current_price }} ₽</span>
+                                        {% if game.discount_price %}
+                                            <span class="old-price">{{ game.price }} ₽</span>
+                                        {% endif %}
+                                    </div>
+                                    {% if is_logged_in and user_type == 'buy' %}
+                                        <form method="post" style="display: inline;">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="game_id" value="{{ game.id }}">
+                                            <button type="submit" class="btn btn-cart">В корзину</button>
+                                        </form>
+                                    {% else %}
+                                        <button class="btn btn-cart" disabled>В корзину</button>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Пагинация -->
+                {% if page_obj.has_other_pages %}
+                    <nav>
+                        <ul class="pagination">
+                            {% if page_obj.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page=1&search={{ search }}&genre={{ genre_names|join:',' }}&price_range={{ price_range }}&in_stock={{ in_stock }}&sort={{ sort }}">«</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}&search={{ search }}&genre={{ genre_names|join:',' }}&price_range={{ price_range }}&in_stock={{ in_stock }}&sort={{ sort }}">‹</a>
+                                </li>
+                            {% endif %}
+
+                            {% for num in page_obj.paginator.page_range %}
+                                {% if page_obj.number == num %}
+                                    <li class="page-item active">
+                                        <span class="page-link">{{ num }}</span>
+                                    </li>
+                                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ num }}&search={{ search }}&genre={{ genre_names|join:',' }}&price_range={{ price_range }}&in_stock={{ in_stock }}&sort={{ sort }}">{{ num }}</a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if page_obj.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.next_page_number }}&search={{ search }}&genre={{ genre_names|join:',' }}&price_range={{ price_range }}&in_stock={{ in_stock }}&sort={{ sort }}">›</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}&search={{ search }}&genre={{ genre_names|join:',' }}&price_range={{ price_range }}&in_stock={{ in_stock }}&sort={{ sort }}">»</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Функция для обновления URL с параметрами
+        function updateURL() {
+            const params = new URLSearchParams();
+            const currentParams = new URLSearchParams(window.location.search);
+
+            // Поиск
+            const search = document.getElementById('search').value;
+            if (search) params.set('search', search);
+
+            // Жанры
+            const genreCheckboxes = document.querySelectorAll('input[name="genre"]:checked');
+            const genres = Array.from(genreCheckboxes).map(cb => cb.value);
+            if (genres.length > 0) params.set('genre', genres.join(','));
+
+            // Цена
+            const priceRange = document.getElementById('price_range').value;
+            if (priceRange) params.set('price_range', priceRange);
+
+
+            // Наличие
+            const inStock = document.getElementById('in_stock').checked;
+            if (inStock) params.set('in_stock', 'true');
+
+            // Сортировка
+            const sort = document.getElementById('sort').value;
+            params.set('sort', sort);
+
+            // Обновляем URL без перезагрузки
+            const newURL = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
+
+            // Перезагружаем страницу только если параметры изменились
+            if (params.toString() !== currentParams.toString()) {
+                window.location.href = newURL;
+            }
+        }
+
+        // Обработчики событий
+        document.getElementById('clear_filters').addEventListener('click', function() {
+            // Сброс всех фильтров
+            document.getElementById('search').value = '';
+            document.getElementById('price_range').value = '';
+            document.getElementById('in_stock').checked = false;
+            document.getElementById('sort').value = 'popularity';
+            // Снимаем выделение с чекбоксов жанров
+            document.querySelectorAll('input[name="genre"]:checked').forEach(cb => cb.checked = false);
+            // Применяем фильтры
+            document.getElementById('filter-form').submit();
+        });
+        document.getElementById('search').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') document.getElementById('filter-form').submit();
+        });
+        document.getElementById('sort').addEventListener('change', function() {
+            document.getElementById('filter-form').submit();
+        });
+
+
+        // Применяем стили для плавного появления
+        const style = document.createElement('style');
+        style.textContent = `
+            .filter-checkbox {
+                animation: fadeIn 0.3s ease;
+                animation-fill-mode: both;
+            }
+
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                    transform: translateX(-10px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+            }
+
+            /* Задержка для анимации каждого чекбокса */
+            .filter-checkbox:nth-child(1) { animation-delay: 0.1s; }
+            .filter-checkbox:nth-child(2) { animation-delay: 0.2s; }
+            .filter-checkbox:nth-child(3) { animation-delay: 0.3s; }
+            .filter-checkbox:nth-child(4) { animation-delay: 0.4s; }
+            .filter-checkbox:nth-child(5) { animation-delay: 0.5s; }
+            .filter-checkbox:nth-child(6) { animation-delay: 0.6s; }
+            .filter-checkbox:nth-child(7) { animation-delay: 0.7s; }
+            .filter-checkbox:nth-child(8) { animation-delay: 0.8s; }
+        `;
+        document.head.appendChild(style);
+
+
+        // Анимация при наведении на ссылку рейтинга
+        document.querySelectorAll('.rating-link').forEach(link => {
+            const stars = link.querySelectorAll('.star');
+            
+            link.addEventListener('mouseenter', function() {
+                stars.forEach(star => {
+                    star.style.color = '#ffd700';
+                    star.textContent = '★';
+                });
+            });
+            
+            link.addEventListener('mouseleave', function() {
+                stars.forEach(star => {
+                    if (!star.classList.contains('filled')) {
+                        star.style.color = '#ddd';
+                        star.textContent = '☆';
+                    } else {
+                        star.style.color = '#ffd700';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

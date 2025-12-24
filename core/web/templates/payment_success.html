@@ -1,0 +1,125 @@
+<!-- Шаблон страницы успешной оплаты -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Заказ оплачен - PlayTrade</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-attachment: fixed;
+            font-family: 'Roboto', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        .success-container {
+            max-width: 600px;
+            padding: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+        }
+        .success-icon {
+            font-size: 80px;
+            color: #28a745;
+            margin-bottom: 30px;
+            animation: checkmark 0.8s ease-in-out;
+        }
+        @keyframes checkmark {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        .success-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+        .success-message {
+            font-size: 18px;
+            color: #e0e0e0;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        .btn-success-custom {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 18px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            margin: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+        }
+        .btn-success-custom:hover {
+            background: linear-gradient(45deg, #218838, #1e7e34);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+            color: white;
+            text-decoration: none;
+        }
+        .order-details {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+        .order-details h4 {
+            color: #fff;
+            margin-bottom: 15px;
+        }
+        .order-details p {
+            color: #e0e0e0;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="success-container">
+        <div class="success-icon">✅</div>
+        <h1 class="success-title">Заказ оплачен!</h1>
+        <p class="success-message">
+            Спасибо за покупку! Ваш заказ успешно оплачен и будет доставлен на ваш компьютер в ближайшее время.
+        </p>
+
+        <div class="order-details">
+            <h4>Информация о заказе</h4>
+            <p><strong>Статус:</strong> Оплачен</p>
+            <p><strong>Дата оплаты:</strong> {% now "d.m.Y H:i" %}</p>
+            <p><strong>Способ доставки:</strong> Цифровая загрузка</p>
+            <p><strong>Время доставки:</strong> Немедленно после обработки</p>
+        </div>
+
+        <div>
+            <a href="/catalog/" class="btn-success-custom">Продолжить покупки</a>
+            <a href="/account/" class="btn-success-custom">Мой аккаунт</a>
+            <a href="/order-cancelled/" class="btn-success-custom" style="background: linear-gradient(45deg, #dc3545, #c82333);">Отменить заказ</a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

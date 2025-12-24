@@ -1,0 +1,220 @@
+<!-- Шаблон страницы истории заказов -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>История заказов - PlayTrade</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            min-height: 100vh;
+        }
+        .navbar {
+            background: rgba(255, 255, 255, 0.1) !important;
+        }
+        .orders-container {
+            max-width: 1000px;
+            margin: 50px auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+        .order-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .order-number {
+            font-weight: bold;
+            color: #667eea;
+            font-size: 1.1rem;
+        }
+        .order-date {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        .order-status {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        .status-paid {
+            background: #d4edda;
+            color: #155724;
+        }
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .status-completed {
+            background: #cce5ff;
+            color: #004085;
+        }
+        .status-cancelled {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .order-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .order-item:last-child {
+            border-bottom: none;
+        }
+        .order-item img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-right: 15px;
+        }
+        .order-item-details {
+            flex-grow: 1;
+        }
+        .order-item-title {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        .order-item-price {
+            color: #28a745;
+            font-weight: bold;
+        }
+        .order-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid #dee2e6;
+        }
+        .total-amount {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #28a745;
+        }
+        .payment-info {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+        .payment-info i {
+            margin-right: 5px;
+        }
+        .empty-orders {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        .btn-back {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border: none;
+            color: white;
+            padding: 10px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+        }
+        .btn-back:hover {
+            color: white;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">PlayTrade</a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="{% url 'catalog' %}">Каталог</a>
+                <a class="nav-link" href="{% url 'cart' %}">Корзина</a>
+                <a class="nav-link" href="{% url 'account' %}">Аккаунт</a>
+                <a class="nav-link" href="{% url 'logout' %}">Выход</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="orders-container">
+            <h2 class="text-center mb-4">📦 История заказов</h2>
+
+            {% if orders %}
+                {% for order in orders %}
+                    <div class="order-card">
+                        <div class="order-header">
+                            <div>
+                                <span class="order-number">{{ order.order_number }}</span>
+                                <span class="order-date ms-3">{{ order.created_at|date:"d.m.Y H:i" }}</span>
+                            </div>
+                            <span class="order-status 
+                                {% if order.status_code == 'paid' %}status-paid
+                                {% elif order.status_code == 'pending' %}status-pending
+                                {% elif order.status_code == 'completed' %}status-completed
+                                {% elif order.status_code == 'cancelled' %}status-cancelled
+                                {% else %}status-paid{% endif %}">
+                                {{ order.status }}
+                            </span>
+                        </div>
+
+                        <div class="order-items">
+                            {% for item in order.items %}
+                                <div class="order-item">
+                                    {% if item.game_image %}
+                                        <img src="{{ item.game_image }}" alt="{{ item.game_title }}">
+                                    {% else %}
+                                        <div style="width: 60px; height: 60px; background: #e9ecef; border-radius: 5px; margin-right: 15px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; color: #6c757d;">Нет фото</div>
+                                    {% endif %}
+                                    <div class="order-item-details">
+                                        <div class="order-item-title">{{ item.game_title }}</div>
+                                        <small class="text-muted">Количество: {{ item.quantity }}</small>
+                                    </div>
+                                    <div class="order-item-price">{{ item.total }} ₽</div>
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="order-total">
+                            <div class="payment-info">
+                                {% if order.payment %}
+                                    💳 {{ order.payment.method }}
+                                    {% if order.payment.card_last_four %}
+                                        (**** {{ order.payment.card_last_four }})
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                            <div class="total-amount">Итого: {{ order.total }} ₽</div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-orders">
+                    <h4>📭 У вас пока нет заказов</h4>
+                    <p class="text-muted">Перейдите в каталог, чтобы начать покупки</p>
+                    <a href="{% url 'catalog' %}" class="btn-back mt-3">Перейти в каталог</a>
+                </div>
+            {% endif %}
+
+            <div class="text-center mt-4">
+                <a href="{% url 'account' %}" class="btn-back">← Вернуться в аккаунт</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+

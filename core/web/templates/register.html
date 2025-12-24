@@ -1,0 +1,324 @@
+<!-- Шаблон страницы регистрации -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация - PlayTrade</title>
+    <link href="https://share.google/m8Z4fEOpFC085bDxg" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(45deg, #667eea, #764ba2, #a044ff, #6c5ce7);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .navbar {
+            background: rgba(255, 255, 255, 0.1) !important;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .navbar .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .navbar-brand {
+            font-weight: bold;
+            color: #ffd700 !important;
+            text-shadow: 0 0 20px #ffd700, 0 0 40px #ffd700;
+            margin-right: 2rem;
+            font-size: 1.5rem;
+            text-decoration: none !important;
+        }
+        .nav-tabs {
+            display: flex;
+            gap: 2rem;
+        }
+        .nav-tabs .nav-link {
+            color: #ffd700;
+            text-shadow: 0 0 20px #ffd700, 0 0 40px #ffd700;
+            border: none;
+            font-weight: 500;
+            text-decoration: none !important;
+        }
+        .content {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+        .register-form {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+        .register-form h2 {
+            color: #ffd700;
+            text-shadow: 0 0 20px #ffd700, 0 0 40px #ffd700;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            color: white;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        .btn {
+            padding: 15px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            color: white;
+            background: linear-gradient(45deg, #28a745, #20c997);
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1.2rem;
+            width: 100%;
+        }
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+        .messages {
+            background: rgba(255, 255, 255, 0.9);
+            color: green;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        main {
+            padding-bottom: 120px;
+        }
+        .dark-select-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .dark-select {
+            width: 100%;
+            padding: 12px 40px 12px 15px;
+            background: #1a1a2e;
+            color: white;
+            border: 2px solid #0f3460;
+            border-radius: 8px;
+            font-size: 16px;
+            appearance: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .dark-select:focus {
+            border-color: #e94560;
+            box-shadow: 0 0 0 3px rgba(233, 69, 96, 0.3);
+            outline: none;
+        }
+
+        .dark-select option {
+            background: #1a1a2e;
+            color: white;
+            padding: 10px;
+        }
+
+        .select-arrow {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            pointer-events: none;
+            font-size: 12px;
+        }
+
+
+        /* Кастомный скроллбар */
+        .dark-select::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .dark-select::-webkit-scrollbar-track {
+            background: #0f3460;
+            border-radius: 5px;
+        }
+
+        .dark-select::-webkit-scrollbar-thumb {
+            background: #e94560;
+            border-radius: 5px;
+        }
+
+        .dark-select::-webkit-scrollbar-thumb:hover {
+            background: #ff6b9d;
+        }
+    </style>
+</head>
+<body>
+    <header class="bg-white shadow-sm">
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <div class="container">
+                <a class="navbar-brand" href="/">PlayTrade</a>
+                <ul class="nav-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Главная</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/docs/">Документация</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about/">О нас</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main class="content">
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <div class="register-form" id="register-form">
+            <h2>Регистрация</h2>
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="user_type">Тип регистрации</label>
+                    <div class="dark-select-wrapper">
+                        <select id="user_type" name="user_type" class="dark-select" required>
+                            <option value="buy">Для покупки игр</option>
+                            <option value="sell">Для продажи игр</option>
+                        </select>
+                        <div class="select-arrow">▼</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="username">Имя пользователя</label>
+                    <input type="text" id="username" name="username" placeholder="Введите имя пользователя" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Пароль</label>
+                    <input type="password" id="password" name="password" placeholder="Введите пароль" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirm_password">Подтвердите пароль</label>
+                    <input type="password" id="confirm_password" name="confirm_password" placeholder="Подтвердите пароль" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="Введите email" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Номер телефона</label>
+                    <input type="tel" id="phone" name="phone" placeholder="Введите номер телефона" required>
+                </div>
+                <div id="buy_fields" style="display: none;">
+                    <div class="form-group">
+                        <label for="first_name">Имя</label>
+                        <input type="text" id="first_name" name="first_name" placeholder="Введите имя">
+                    </div>
+                    <div class="form-group">
+                        <label for="last_name">Фамилия</label>
+                        <input type="text" id="last_name" name="last_name" placeholder="Введите фамилию">
+                    </div>
+                    <div class="form-group">
+                        <label for="country">Страна</label>
+                        <input type="text" id="country" name="country" placeholder="Введите страну">
+                    </div>
+                    <div class="form-group">
+                        <label for="city">Город</label>
+                        <input type="text" id="city" name="city" placeholder="Введите город">
+                    </div>
+                    <div class="form-group">
+                        <label for="birth_date">Дата рождения</label>
+                        <input type="date" id="birth_date" name="birth_date">
+                    </div>
+                </div>
+                <div id="sell_fields" style="display: none;">
+                    <!-- Поля для продавцов удалены -->
+                </div>
+                <button type="submit" class="btn">Зарегистрироваться</button>
+            </form>
+            <button id="existing" class="btn" style="margin-top: 10px; background: #007bff;">У меня уже есть аккаунт</button>
+        </div>
+        <div class="register-form" id="login-form" style="display: none;">
+            <h2>Вход</h2>
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="login_username">Имя пользователя</label>
+                    <input type="text" id="login_username" name="login_username" placeholder="Введите имя пользователя" required>
+                </div>
+                <div class="form-group">
+                    <label for="login_password">Пароль</label>
+                    <input type="password" id="login_password" name="login_password" placeholder="Введите пароль" required>
+                </div>
+                <button type="submit" class="btn">Войти</button>
+            </form>
+            <button id="back" class="btn" style="margin-top: 10px; background: #28a745;">Назад к регистрации</button>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('user_type').addEventListener('change', function() {
+            var buyFields = document.getElementById('buy_fields');
+            var sellFields = document.getElementById('sell_fields');
+            if (this.value === 'buy') {
+                buyFields.style.display = 'block';
+                sellFields.style.display = 'none';
+            } else if (this.value === 'sell') {
+                buyFields.style.display = 'none';
+                sellFields.style.display = 'block';
+            } else {
+                buyFields.style.display = 'none';
+                sellFields.style.display = 'none';
+            }
+        });
+        document.getElementById('existing').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('register-form').style.display = 'none';
+            document.getElementById('login-form').style.display = 'block';
+        });
+        document.getElementById('back').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('register-form').style.display = 'block';
+        });
+        // Скрыть сообщения через 2 секунды
+        setTimeout(function() {
+            var messages = document.querySelector('.messages');
+            if (messages) {
+                messages.style.display = 'none';
+            }
+        }, 2000);
+    </script>
+</body>
+</html>

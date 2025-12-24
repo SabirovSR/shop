@@ -1,0 +1,71 @@
+<!-- Шаблон для домашней страницы магазина -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Магазин API</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        p {
+            font-size: 1.2em;
+            margin: 10px 0;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin: 10px 0;
+        }
+        a {
+            color: #ffd700;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+        a:hover {
+            color: #ffed4e;
+        }
+        .container {
+            max-width: 600px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Добро пожаловать в Магазин API</h1>
+        <p>Конечные точки API:</p>
+        <ul>
+            <li><a href="/api/v1/authors/">Авторы</a></li>
+            <li><a href="/api/v1/books/">Книги</a></li>
+            <li><a href="/api/v1/categories/">Категории</a></li>
+            <li><a href="/api/v1/reviews/">Отзывы</a></li>
+        </ul>
+        <p><a href="/docs/">Документация сайта</a></p>
+        <p><a href="/api/v1/docs/swagger-ui/">Документация API</a></p>
+        <p><a href="/admin/">Админ</a></p>
+    </div>
+</body>
+</html>

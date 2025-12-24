@@ -1,0 +1,477 @@
+<!-- Шаблон страницы оформления заказа -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Оформление заказа - PlayTrade</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-attachment: fixed;
+            font-family: 'Roboto', sans-serif;
+            min-height: 100vh;
+            color: white;
+        }
+        .navbar {
+            background: rgba(255, 255, 255, 0.1) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+        .navbar-brand {
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: bold;
+            text-shadow: 0 0 20px rgba(255, 107, 53, 0.5);
+        }
+        .checkout-container {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .order-summary {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+        .game-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .game-item:last-child {
+            border-bottom: none;
+        }
+        .game-image {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-right: 15px;
+        }
+        .game-info h6 {
+            margin: 0;
+            color: #fff;
+            font-size: 16px;
+        }
+        .game-info p {
+            margin: 0;
+            color: #e0e0e0;
+            font-size: 14px;
+        }
+        .payment-methods {
+            margin-bottom: 30px;
+        }
+        .payment-option {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .payment-option:hover {
+            border-color: #ff6b35;
+            background: rgba(255, 107, 53, 0.1);
+        }
+        .payment-option.selected {
+            border-color: #ff6b35;
+            background: rgba(255, 107, 53, 0.2);
+        }
+        .card-form {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 12px;
+            display: none;
+        }
+        .card-form.show {
+            display: block;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            color: #fff;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 16px;
+        }
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .select-arrow {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            pointer-events: none;
+            font-size: 12px;
+        }
+        .btn-pay {
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 18px;
+            font-weight: 600;
+            width: 100%;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+        }
+        .btn-pay:hover {
+            background: linear-gradient(45deg, #e55a2b, #e8851a);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+        }
+        .total-amount {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ff6b35;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .messages {
+            background: rgba(255, 255, 255, 0.9);
+            color: red;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .dark-select-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .dark-select {
+            width: 100%;
+            padding: 12px 40px 12px 15px;
+            background: #1a1a2e;
+            color: white;
+            border: 2px solid #0f3460;
+            border-radius: 8px;
+            font-size: 16px;
+            appearance: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .dark-select:focus {
+            border-color: #e94560;
+            box-shadow: 0 0 0 3px rgba(233, 69, 96, 0.3);
+            outline: none;
+        }
+
+        .dark-select option {
+            background: #1a1a2e;
+            color: white;
+            padding: 10px;
+        }
+
+
+        /* Кастомный скроллбар */
+        .dark-select::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .dark-select::-webkit-scrollbar-track {
+            background: #0f3460;
+            border-radius: 5px;
+        }
+
+        .dark-select::-webkit-scrollbar-thumb {
+            background: #e94560;
+            border-radius: 5px;
+        }
+
+        .dark-select::-webkit-scrollbar-thumb:hover {
+            background: #ff6b9d;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="/">PlayTrade</a>
+            <div class="d-flex align-items-center">
+                {% if is_logged_in %}
+                    <a href="/account/" class="btn btn-outline-primary me-2">👤 Аккаунт</a>
+                    {% if user_type == 'buy' %}
+                        <a href="/cart/" class="btn btn-warning me-2">🛒 Корзина</a>
+                    {% endif %}
+                {% else %}
+                    <a href="/register/" class="btn btn-primary">Регистрация / Вход</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="checkout-container">
+            <div style="text-align: center; margin-bottom: 20px;">
+                <a href="/cart/" class="btn btn-outline-light">← Назад в корзину</a>
+            </div>
+            <h1 class="text-center mb-4" style="color: #fff; font-weight: bold;">Оформление заказа</h1>
+
+            {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <!-- Order Summary -->
+            <div class="order-summary">
+                <h3 style="color: #fff; margin-bottom: 20px;">Ваш заказ</h3>
+                {% for game in games %}
+                <div class="game-item">
+                    {% if game.image %}
+                        <img src="{{ game.image }}" alt="{{ game.title }}" class="game-image">
+                    {% else %}
+                        <img src="{% static 'web/images/game_placeholder.jpg' %}" alt="{{ game.title }}" class="game-image">
+                    {% endif %}
+                    <div class="game-info flex-grow-1">
+                        <h6>{{ game.title }}</h6>
+                        <p>Количество: {{ game.quantity }}</p>
+                        <p>Цена: {{ game.price }} ₽</p>
+                    </div>
+                    <div style="color: #fff; font-weight: 600;">
+                        {{ game.subtotal }} ₽
+                    </div>
+                </div>
+                {% endfor %}
+                <div class="total-amount">
+                    Итого: {{ total }} ₽
+                </div>
+            </div>
+
+            <!-- Payment Methods -->
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="payment_method" id="payment_method">
+
+                <div class="payment-methods">
+                    <h3 style="color: #fff; margin-bottom: 20px;">Выберите способ оплаты</h3>
+
+
+                    <!-- SBP -->
+                    <div class="payment-option" data-method="sbp">
+                        <div class="d-flex align-items-center">
+                            <input type="radio" name="payment_type" value="sbp" style="margin-right: 15px;">
+                            <div>
+                                <h5 style="color: #fff; margin: 0;">📱 Система Быстрых Платежей (СБП)</h5>
+                                <p style="color: #e0e0e0; margin: 0;">Оплата через мобильное приложение банка</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bank Options -->
+                    <div class="payment-option" data-method="bank">
+                        <div class="d-flex align-items-center">
+                            <input type="radio" name="payment_type" value="bank" style="margin-right: 15px;">
+                            <div>
+                                <h5 style="color: #fff; margin: 0;">🏦 Оплата через банк</h5>
+                                <p style="color: #e0e0e0; margin: 0;">Через мобильное приложение банка</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Details Form -->
+                <div class="card-form" id="card-form">
+                    <h4 style="color: #fff; margin-bottom: 20px;" id="form-title">Данные оплаты</h4>
+
+                    <!-- Bank Select for Bank Payment -->
+                    <div class="form-group" id="bank-select-group" style="display: none;">
+                        <label for="bank_select">Выберите банк</label>
+                        <div class="dark-select-wrapper">
+                            <select id="bank_select" name="bank_select" class="dark-select">
+                                <option value="">Выберите банк</option>
+                                <option value="tinkoff">Тинькофф</option>
+                                <option value="sber">Сбер</option>
+                                <option value="alfa">Альфа</option>
+                                <option value="ozon">Ozon</option>
+                                <option value="vtb">ВТБ</option>
+                            </select>
+                            <div class="select-arrow">▼</div>
+                        </div>
+                    </div>
+
+                    <!-- Phone for SBP -->
+                    <div class="form-group" id="phone-group" style="display: none;">
+                        <label for="phone">Номер телефона для подтверждения</label>
+                        <input type="tel" id="phone" name="phone" placeholder="+7 (999) 123-45-67" maxlength="18">
+                    </div>
+
+                    <!-- Card Details for Card and Bank -->
+                    <div id="card-details-group">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="card_number">Номер карты</label>
+                                    <input type="text" id="card_number" name="card_number" placeholder="1234 5678 9012 3456" maxlength="19">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="expiry_date">Срок действия</label>
+                                    <input type="text" id="expiry_date" name="expiry_date" placeholder="MM/YY" maxlength="5">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="cvv">CVV</label>
+                                    <input type="text" id="cvv" name="cvv" placeholder="123" maxlength="3">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="cardholder_name">Имя владельца</label>
+                            <input type="text" id="cardholder_name" name="cardholder_name" placeholder="IVAN IVANOV">
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-pay" id="pay-button" disabled>Оплатить {{ total }} ₽</button>
+            </form>
+
+            <!-- Contact Seller Button -->
+            <div style="text-align: center; margin-top: 20px;">
+                <a href="/select-game-chat/" class="btn btn-outline-light">Возникли вопросы по заказу? Можете написать продавцу</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Payment method selection
+        document.querySelectorAll('.payment-option').forEach(option => {
+            option.addEventListener('click', function() {
+                // Remove selected class from all options
+                document.querySelectorAll('.payment-option').forEach(opt => opt.classList.remove('selected'));
+                // Add selected class to clicked option
+                this.classList.add('selected');
+
+                // Check the radio button
+                const radio = this.querySelector('input[type="radio"]');
+                if (radio) {
+                    radio.checked = true;
+                }
+
+                // Show/hide card form
+                const method = this.dataset.method;
+                const cardForm = document.getElementById('card-form');
+                const paymentMethodInput = document.getElementById('payment_method');
+
+                if (method === 'sbp') {
+                    cardForm.classList.add('show');
+                    document.getElementById('bank-select-group').style.display = 'none';
+                    document.getElementById('phone-group').style.display = 'block';
+                    document.getElementById('card-details-group').style.display = 'block';
+                    document.getElementById('form-title').textContent = 'Данные для СБП';
+                    paymentMethodInput.value = 'sbp';
+                } else if (method === 'bank') {
+                    cardForm.classList.add('show');
+                    document.getElementById('bank-select-group').style.display = 'block';
+                    document.getElementById('phone-group').style.display = 'none';
+                    document.getElementById('card-details-group').style.display = 'block';
+                    document.getElementById('form-title').textContent = 'Данные для оплаты через банк';
+                    // Set default bank or empty
+                    paymentMethodInput.value = document.getElementById('bank_select').value || '';
+                }
+
+                // Enable pay button
+                document.getElementById('pay-button').disabled = false;
+            });
+        });
+
+
+        // Card number formatting
+        document.getElementById('card_number').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+            let formattedValue = '';
+            for (let i = 0; i < value.length; i++) {
+                if (i > 0 && i % 4 === 0) {
+                    formattedValue += ' ';
+                }
+                formattedValue += value[i];
+            }
+            e.target.value = formattedValue;
+        });
+
+        // Expiry date formatting
+        document.getElementById('expiry_date').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length >= 2) {
+                value = value.substring(0, 2) + '/' + value.substring(2, 4);
+            }
+            e.target.value = value;
+        });
+
+        // Bank select change
+        document.getElementById('bank_select').addEventListener('change', function() {
+            const selectedBank = this.value;
+            document.getElementById('payment_method').value = selectedBank;
+            // Enable pay button if bank selected
+            const payButton = document.getElementById('pay-button');
+            if (selectedBank) {
+                payButton.disabled = false;
+            } else {
+                payButton.disabled = true;
+            }
+        });
+
+        // Phone number formatting
+        document.getElementById('phone').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.startsWith('7') || value.startsWith('8')) {
+                value = value.substring(1);
+            }
+            if (value.length > 10) {
+                value = value.substring(0, 10);
+            }
+            let formatted = '+7 ';
+            if (value.length > 0) {
+                formatted += '(' + value.substring(0, 3) + ') ';
+            }
+            if (value.length > 3) {
+                formatted += value.substring(3, 6) + '-';
+            }
+            if (value.length > 6) {
+                formatted += value.substring(6, 8) + '-';
+            }
+            if (value.length > 8) {
+                formatted += value.substring(8, 10);
+            }
+            e.target.value = formatted;
+        });
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!-- Шаблон страницы списка книг -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список книг</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        h1 {
+            text-align: center;
+            color: #ffd700;
+        }
+        .book {
+            background: rgba(255, 255, 255, 0.2);
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .book h3 {
+            margin: 0 0 5px 0;
+            color: #ffd700;
+        }
+        .book p {
+            margin: 5px 0;
+        }
+        a {
+            color: #ffd700;
+            text-decoration: none;
+        }
+        a:hover {
+            color: #ffed4e;
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Список книг</h1>
+        {% for book in books %}
+        <div class="book">
+            <h3>{{ book.title }}</h3>
+            <p><strong>Автор:</strong> {{ book.author.name }}</p>
+            <p><strong>Категория:</strong> {{ book.category.name }}</p>
+            <p><strong>Цена:</strong> {{ book.price }} руб.</p>
+            <p><strong>Описание:</strong> {{ book.description }}</p>
+        </div>
+        {% empty %}
+        <p>Книги не найдены.</p>
+        {% endfor %}
+        <a href="/welcome/" class="back-link">Вернуться на главную</a>
+    </div>
+</body>
+</html>

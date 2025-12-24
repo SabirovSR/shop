@@ -1,0 +1,108 @@
+<!-- Шаблон для страницы документации API -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Документация API</title>
+    <style>
+        .code-example {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 0.375rem;
+            padding: 1rem;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <header class="bg-white shadow-sm">
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <div class="container">
+                <a class="navbar-brand" href="/">Библиотека книг</a>
+                <ul class="nav nav-tabs ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Главная</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/add-book/">Добавить книгу</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/add-author/">Добавить автора</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/docs/">Документация</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/">Админ</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container my-5">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="mb-4 text-center">Документация API Магазина Книг</h1>
+                <p class="lead text-center">Это API предоставляет доступ к данным о авторах, книгах, категориях и отзывах.</p>
+
+                <section class="mb-5">
+                    <h2>Базовый URL</h2>
+                    <p><code class="bg-light p-2 rounded">http://127.0.0.1:8000/api/v1/</code></p>
+                </section>
+
+                <section class="mb-5">
+                    <h2>Конечные точки</h2>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><strong>Авторы:</strong> <code>/authors/</code> (GET, POST), <code>/authors/<id>/</code> (GET, DELETE)</li>
+                        <li class="list-group-item"><strong>Книги:</strong> <code>/books/</code> (GET, POST), <code>/books/<id>/</code> (GET, PUT, PATCH, DELETE)</li>
+                        <li class="list-group-item"><strong>Категории:</strong> <code>/categories/</code> (GET, POST)</li>
+                        <li class="list-group-item"><strong>Отзывы:</strong> <code>/reviews/</code> (GET, POST), <code>/reviews/<id>/</code> (DELETE)</li>
+                        <li class="list-group-item"><strong>Отзывы к книге:</strong> <code>/books/<book_id>/reviews/</code> (GET)</li>
+                    </ul>
+                </section>
+
+                <section class="mb-5">
+                    <h2>Примеры запросов</h2>
+                    <h3>Получить список авторов</h3>
+                    <div class="code-example">GET /api/v1/authors/</div>
+
+                    <h3 class="mt-4">Создать нового автора</h3>
+                    <div class="code-example">POST /api/v1/authors/
+Content-Type: application/json
+
+{
+    "name": "Имя Автора",
+    "email": "author@example.com",
+    "bio": "Биография автора",
+    "birth_date": "1990-01-01"
+}</div>
+
+                    <h3 class="mt-4">Получить книгу по ID</h3>
+                    <div class="code-example">GET /api/v1/books/1/</div>
+                </section>
+
+                <section class="mb-5">
+                    <h2>Swagger UI</h2>
+                    <p>Для интерактивной документации используйте <a href="/api/v1/docs/swagger-ui/" class="btn btn-primary">Swagger UI</a>.</p>
+
+                    <h2>ReDoc</h2>
+                    <p>Альтернативная документация доступна по ссылке <a href="/api/v1/docs/redoc/" class="btn btn-secondary">ReDoc</a>.</p>
+                </section>
+
+                <div class="text-center">
+                    <a href="/" class="btn btn-outline-primary">Вернуться на главную</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-dark text-light text-center py-3">
+        <div class="container">
+            <p class="mb-0">&copy; 2025 Библиотека книг. Все права защищены.</p>
+        </div>
+    </footer>
+</body>
+</html>

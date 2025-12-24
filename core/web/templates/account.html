@@ -1,0 +1,500 @@
+<!-- Шаблон страницы аккаунта пользователя -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мой аккаунт - PlayTrade</title>
+    <link href="https://share.google/m8Z4fEOpFC085bDxg" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(45deg, #667eea, #764ba2, #a044ff, #6c5ce7);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .navbar {
+            background: rgba(255, 255, 255, 0.1) !important;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .navbar .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .navbar-brand {
+            font-weight: bold;
+            color: #ffd700 !important;
+            text-shadow: 0 0 20px #ffd700, 0 0 40px #ffd700;
+            margin-right: 2rem;
+            font-size: 1.5rem;
+            text-decoration: none !important;
+        }
+        .nav-tabs {
+            display: flex;
+            gap: 2rem;
+        }
+        .nav-tabs .nav-link {
+            color: #ffd700;
+            text-shadow: 0 0 20px #ffd700, 0 0 40px #ffd700;
+            border: none;
+            font-weight: 500;
+            text-decoration: none !important;
+        }
+        .content {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.4);
+            backdrop-filter: blur(10px);
+        }
+        .title {
+            font-size: 3rem;
+            color: #ffd700;
+            text-shadow: 0 0 20px #ffd700, 0 0 40px #ffd700;
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+        .profile-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: #333;
+            box-shadow: 0 0 20px rgba(255,215,0,0.5);
+        }
+        .user-info {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .user-info h2 {
+            color: #ffd700;
+            text-shadow: 0 0 15px #ffd700;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            text-align: center;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .info-item {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #ffd700;
+        }
+        .info-item strong {
+            color: #ffd700;
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+        .info-item span {
+            color: white;
+            font-size: 1rem;
+        }
+        .user-info input, .user-info textarea, .user-info select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 0.9rem;
+        }
+        .user-info input::placeholder, .user-info textarea::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        .user-info label {
+            display: block;
+            color: #ffd700;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        .full-width {
+            grid-column: span 2;
+        }
+        .actions {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .btn {
+            padding: 12px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            color: white;
+            background: linear-gradient(45deg, #28a745, #20c997);
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1.1rem;
+            display: inline-block;
+            margin: 0 10px;
+        }
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+        .logout-btn {
+            background: linear-gradient(45deg, #dc3545, #c82333);
+        }
+        main {
+            padding-bottom: 120px;
+        }
+        .messages {
+            background: rgba(255, 255, 255, 0.9);
+            color: green;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header class="bg-white shadow-sm">
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <div class="container">
+                <a class="navbar-brand" href="/">PlayTrade</a>
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/catalog/">Каталог</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/docs/">Документация</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main class="content">
+        <h1 class="title">Мой аккаунт</h1>
+
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% if error %}
+            <div class="user-info">
+                <h3>⚠️ {{ error|default:"Сначала необходимо пройти регистрацию" }}</h3>
+            </div>
+            <div class="actions">
+                <a href="/register/" class="btn">Войти</a>
+                <a href="/catalog/" class="btn">Вернуться в каталог</a>
+            </div>
+        {% else %}
+            <div class="profile-header">
+                <div class="avatar">
+                    {% if user.avatar and user.avatar.url %}
+                        <img src="{{ user.avatar.url }}" alt="Аватар" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                    {% else %}
+                        {{ user.username|slice:":1"|upper }}
+                    {% endif %}
+                </div>
+                <h2>{{ user.username }}</h2>
+                <p>{{ user.user_type }}</p>
+            </div>
+
+            <div class="user-info">
+                <h2>👤 Информация о профиле</h2>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <strong>Имя пользователя:</strong>
+                        <span>{{ user.username }}</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>Email:</strong>
+                        <span>{{ user.email }}</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>Телефон:</strong>
+                        <span>{{ user.phone }}</span>
+                    </div>
+
+                    {% if user_type == 'buy' %}
+                        <div class="info-item">
+                            <strong>Имя:</strong>
+                            <span>{{ user.first_name|default:"Не указано" }}</span>
+                        </div>
+                        <div class="info-item">
+                            <strong>Фамилия:</strong>
+                            <span>{{ user.last_name|default:"Не указано" }}</span>
+                        </div>
+                        <div class="info-item">
+                            <strong>Страна:</strong>
+                            <span>{{ user.country|default:"Не указано" }}</span>
+                        </div>
+                        <div class="info-item">
+                            <strong>Город:</strong>
+                            <span>{{ user.city|default:"Не указано" }}</span>
+                        </div>
+                        <div class="info-item full-width">
+                            <strong>Дата рождения:</strong>
+                            <span>{{ user.birth_date|default:"Не указано" }}</span>
+                        </div>
+                    {% elif user_type == 'sell' %}
+                        <div class="info-item">
+                            <strong>Имя:</strong>
+                            <span>{{ user.first_name|default:"Не указано" }}</span>
+                        </div>
+                        <div class="info-item">
+                            <strong>Фамилия:</strong>
+                            <span>{{ user.last_name|default:"Не указано" }}</span>
+                        </div>
+                        <div class="info-item">
+                            <strong>Страна:</strong>
+                            <span>{{ user.country|default:"Не указано" }}</span>
+                        </div>
+                        <div class="info-item">
+                            <strong>Город:</strong>
+                            <span>{{ user.city|default:"Не указано" }}</span>
+                        </div>
+                        <div class="info-item full-width">
+                            <strong>Дата рождения:</strong>
+                            <span>{{ user.birth_date|default:"Не указано" }}</span>
+                        </div>
+                    {% endif %}
+
+                    <div class="info-item full-width">
+                        <strong>Дата регистрации:</strong>
+                        <span>{{ user.registration_date }}</span>
+                    </div>
+                </div>
+            </div>
+
+            {% if user_type == 'sell' %}
+            <div class="user-info">
+                <h2>💰 Кошелек</h2>
+                <div class="info-item" style="text-align: center; font-size: 1.5rem;">
+                    <strong>Баланс:</strong>
+                    <span style="color: #ffd700; font-weight: bold;">{{ user.balance }} ₽</span>
+                </div>
+                <div class="actions" style="text-align: center; margin-top: 20px;">
+                    <button type="button" class="btn" onclick="toggleWithdrawForm()">Вывести деньги</button>
+                </div>
+                <div id="withdraw-form" style="display: none; margin-top: 20px;">
+                    <form method="post" action="{% url 'withdraw_money' %}">
+                        {% csrf_token %}
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <label for="bank">Банк:</label>
+                                <select id="bank" name="bank" required style="width: 100%; padding: 8px; border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 5px; background: black; color: white;">
+                                    <option value="" style="background: black; color: white;">Выберите банк</option>
+                                    <option value="Сбербанк" style="background: black; color: white;">Сбербанк</option>
+                                    <option value="Тинькофф" style="background: black; color: white;">Тинькофф</option>
+                                    <option value="Альфа-Банк" style="background: black; color: white;">Альфа-Банк</option>
+                                    <option value="ВТБ" style="background: black; color: white;">ВТБ</option>
+                                    <option value="Озон Банк" style="background: black; color: white;">Озон Банк</option>
+                                </select>
+                            </div>
+                            <div class="info-item">
+                                <label for="card_number">Номер карты:</label>
+                                <input type="text" id="card_number" name="card_number" placeholder="XXXXXXXX" maxlength="8" pattern="[0-9]{8}" required style="width: 100%; padding: 8px; border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 5px; background: rgba(255, 255, 255, 0.1); color: white;">
+                            </div>
+                            <div class="info-item full-width">
+                                <label for="amount">Сумма (₽):</label>
+                                <input type="number" id="amount" name="amount" step="0.01" min="0.01" max="{{ user.balance }}" placeholder="Введите сумму" required style="width: 100%; padding: 8px; border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 5px; background: rgba(255, 255, 255, 0.1); color: white;">
+                            </div>
+                        </div>
+                        <div class="actions" style="text-align: center; margin-top: 20px;">
+                            <button type="submit" class="btn">Вывести</button>
+                            <button type="button" class="btn logout-btn" onclick="toggleWithdrawForm()">Отмена</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if user_type == 'sell' %}
+            <div class="user-info">
+                <h2>🎮 Мои игры</h2>
+                {% if user.games %}
+                <div class="row">
+                    {% for game in user.games %}
+                    <div class="col-md-6 col-lg-4 mb-3">
+                        <div class="card h-100" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255,255,255,0.2);">
+                            {% if game.image %}
+                            <img src="{{ game.image.url }}" class="card-img-top" alt="{{ game.title }}" style="height: 150px; object-fit: cover;">
+                            {% else %}
+                            <img src="{% static 'web/images/game_placeholder.jpg' %}" class="card-img-top" alt="{{ game.title }}" style="height: 150px; object-fit: cover;">
+                            {% endif %}
+                            <div class="card-body">
+                                <h5 class="card-title" style="color: #ffd700;">{{ game.title }}</h5>
+                                <p class="card-text" style="color: white;">Жанр: {{ game.genre.name }}</p>
+                                <p class="card-text" style="color: white;">Цена: {{ game.price }} ₽</p>
+                                <p class="card-text" style="color: white;">Платформа: {{ game.get_platform_display }}</p>
+                                <p class="card-text" style="color: white;">Рейтинг: {{ game.rating }}/5</p>
+                                <form method="post" action="{% url 'delete_game' game.id %}" style="display: inline;" onsubmit="return confirm('Вы уверены, что хотите удалить эту игру?')">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger btn-sm">Удалить игру</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p style="text-align: center; color: white;">У вас нет добавленных игр.</p>
+                <div class="actions" style="text-align: center; margin-top: 20px;">
+                    <a href="{% url 'add_game' %}" class="btn">Добавить игру</a>
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
+
+            {% if user.chats %}
+            <div class="user-info">
+                <h2>💬 Чаты с покупателями</h2>
+                {% for chat in user.chats %}
+                <div class="chat-item" style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px; margin-bottom: 10px; border-left: 4px solid #ffd700; cursor: pointer;" onclick="window.location.href='/seller-chat/{{ chat.game.id }}/'">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <strong style="color: #ffd700;">{{ chat.game.title }}</strong>
+                        {% if chat.unread_count > 0 %}
+                        <span style="background: #ff4444; color: white; padding: 2px 6px; border-radius: 10px; font-size: 0.8rem;">{{ chat.unread_count }} новых</span>
+                        {% endif %}
+                    </div>
+                    <p style="color: white; margin: 5px 0;"><strong>{{ chat.last_sender }}:</strong> {{ chat.last_message|truncatechars:50 }}</p>
+                    <small style="color: rgba(255,255,255,0.7);">{{ chat.timestamp|date:"d.m.Y H:i" }}</small>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {% if user.reviews %}
+            <div class="user-info">
+                <h2>⭐ Отзывы на мои игры</h2>
+                {% for review in user.reviews %}
+                <div class="review-item" style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px; margin-bottom: 10px; border-left: 4px solid #ffd700;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <strong style="color: #ffd700;">{{ review.game.title }}</strong>
+                        <span style="color: #ffd700;">{{ review.rating }}/5 ★</span>
+                    </div>
+                    <p style="color: white; margin: 5px 0;">От: {{ review.reviewer_name }}</p>
+                    {% if review.comment %}
+                    <p style="color: white; margin: 5px 0;">Комментарий: {{ review.comment }}</p>
+                    {% endif %}
+                    <small style="color: rgba(255,255,255,0.7);">{{ review.created_at|date:"d.m.Y H:i" }}</small>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="user-info">
+                <h2>✏️ Редактировать профиль</h2>
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {% if user_type == 'buy' %}
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <label for="first_name">Имя (по желанию):</label>
+                                <input type="text" id="first_name" name="first_name" value="{{ user.first_name|default:'' }}" placeholder="Введите имя">
+                            </div>
+                            <div class="info-item">
+                                <label for="last_name">Фамилия (по желанию):</label>
+                                <input type="text" id="last_name" name="last_name" value="{{ user.last_name|default:'' }}" placeholder="Введите фамилию">
+                            </div>
+                            <div class="info-item">
+                                <label for="country">Страна (по желанию):</label>
+                                <input type="text" id="country" name="country" value="{{ user.country|default:'' }}" placeholder="Введите страну">
+                            </div>
+                            <div class="info-item">
+                                <label for="city">Город (по желанию):</label>
+                                <input type="text" id="city" name="city" value="{{ user.city|default:'' }}" placeholder="Введите город">
+                            </div>
+                            <div class="info-item full-width">
+                                <label for="birth_date">Дата рождения (по желанию):</label>
+                                <input type="date" id="birth_date" name="birth_date" value="{% if user.birth_date %}{{ user.birth_date|date:'Y-m-d' }}{% endif %}">
+                            </div>
+                        </div>
+                    {% elif user_type == 'sell' %}
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <label for="first_name">Имя</label>
+                                <input type="text" id="first_name" name="first_name" value="{{ user.first_name|default:'' }}" placeholder="Введите имя">
+                            </div>
+                            <div class="info-item">
+                                <label for="last_name">Фамилия</label>
+                                <input type="text" id="last_name" name="last_name" value="{{ user.last_name|default:'' }}" placeholder="Введите фамилию">
+                            </div>
+                            <div class="info-item">
+                                <label for="country">Страна</label>
+                                <input type="text" id="country" name="country" value="{{ user.country|default:'' }}" placeholder="Введите страну">
+                            </div>
+                            <div class="info-item">
+                                <label for="city">Город</label>
+                                <input type="text" id="city" name="city" value="{{ user.city|default:'' }}" placeholder="Введите город">
+                            </div>
+                            <div class="info-item full-width">
+                                <label for="birth_date">Дата рождения</label>
+                                <input type="date" id="birth_date" name="birth_date" value="{% if user.birth_date %}{{ user.birth_date|date:'Y-m-d' }}{% endif %}">
+                            </div>
+                        </div>
+                    {% endif %}
+                    <div class="info-item full-width">
+                        <label for="avatar">Фото профиля (по желанию):</label>
+                        <input type="file" id="avatar" name="avatar" accept="image/*">
+                        {% if user.avatar and user.avatar.url %}
+                            <p style="color: white; font-size: 0.8rem;">Текущее фото: <a href="{{ user.avatar.url }}" target="_blank" style="color: #ffd700;">Посмотреть</a></p>
+                        {% endif %}
+                    </div>
+                    <div class="actions" style="text-align: center; margin-top: 20px;">
+                        <button type="submit" class="btn">💾 Сохранить изменения</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="actions">
+                <a href="{% url 'catalog' %}" class="btn">Вернуться в каталог</a>
+                <a href="/logout/" class="btn logout-btn">Выйти</a>
+            </div>
+        {% endif %}
+    </main>
+
+    <button class="support" onclick="window.location.href='/support/'" style="position: fixed; bottom: 10px; right: 10px; color: #ffd700; text-shadow: 0 0 20px #ffd700, 0 0 40px #ffd700; font-weight: bold; cursor: pointer; background: rgba(0, 0, 0, 0.5); padding: 10px; border-radius: 5px; border: none; z-index: 1000;">Поддержка</button>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function toggleWithdrawForm() {
+            var form = document.getElementById('withdraw-form');
+            if (form.style.display === 'none') {
+                form.style.display = 'block';
+            } else {
+                form.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
