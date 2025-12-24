@@ -1,73 +1,35 @@
-<!-- Шаблон страницы списка книг -->
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Список книг</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            min-height: 100vh;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-        }
-        h1 {
-            text-align: center;
-            color: #ffd700;
-        }
-        .book {
-            background: rgba(255, 255, 255, 0.2);
-            margin: 10px 0;
-            padding: 10px;
-            border-radius: 5px;
-        }
-        .book h3 {
-            margin: 0 0 5px 0;
-            color: #ffd700;
-        }
-        .book p {
-            margin: 5px 0;
-        }
-        a {
-            color: #ffd700;
-            text-decoration: none;
-        }
-        a:hover {
-            color: #ffed4e;
-        }
-        .back-link {
-            display: block;
-            text-align: center;
-            margin-top: 20px;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Список книг</h1>
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Список книг - PlayTrade{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 900px; margin: 50px auto;">
+    <div class="glass-card p-6">
+        <h1 class="title-gold text-center mb-6">📚 Список книг</h1>
+        
         {% for book in books %}
-        <div class="book">
-            <h3>{{ book.title }}</h3>
-            <p><strong>Автор:</strong> {{ book.author.name }}</p>
-            <p><strong>Категория:</strong> {{ book.category.name }}</p>
-            <p><strong>Цена:</strong> {{ book.price }} руб.</p>
-            <p><strong>Описание:</strong> {{ book.description }}</p>
+        <div class="glass-card-dark p-4 mb-4">
+            <h3 class="text-gold mb-2">{{ book.title }}</h3>
+            <div class="text-white">
+                <p class="mb-2"><strong>Автор:</strong> {{ book.author.name }}</p>
+                <p class="mb-2"><strong>Категория:</strong> {{ book.category.name }}</p>
+                <p class="mb-2"><strong>Цена:</strong> <span class="text-gold">{{ book.price }} ₽</span></p>
+                {% if book.description %}
+                <p class="mb-0" style="opacity: 0.8;">{{ book.description }}</p>
+                {% endif %}
+            </div>
         </div>
         {% empty %}
-        <p>Книги не найдены.</p>
+        <div class="text-center p-6">
+            <div style="font-size: 64px; margin-bottom: 16px;">📖</div>
+            <p class="text-white">Книги не найдены</p>
+        </div>
         {% endfor %}
-        <a href="/welcome/" class="back-link">Вернуться на главную</a>
+        
+        <div class="text-center mt-4">
+            <a href="/welcome/" class="btn btn-primary">← Вернуться на главную</a>
+        </div>
     </div>
-</body>
-</html>
+</div>
+{% endblock %}

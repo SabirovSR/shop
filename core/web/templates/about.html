@@ -1,204 +1,107 @@
-<!-- Шаблон страницы "О нас" -->
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>О нас - PlayTrade</title>
-    <link href="https://share.google/m8Z4fEOpFC085bDxg" rel="stylesheet">
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(45deg, #667eea, #764ba2, #a044ff, #6c5ce7);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
-            color: white;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
-        }
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        .navbar {
-            background: rgba(255, 255, 255, 0.1) !important;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        .navbar .container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .navbar-brand {
-            font-weight: bold;
-            color: #ffd700 !important;
-            text-shadow: 0 0 20px #ffd700, 0 0 40px #ffd700;
-            margin-right: 2rem;
-            font-size: 1.5rem;
-            text-decoration: none !important;
-        }
-        .nav-tabs {
-            display: flex;
-            gap: 2rem;
-        }
-        .nav-tabs .nav-link {
-            color: #ffd700;
-            text-shadow: 0 0 20px #ffd700, 0 0 40px #ffd700;
-            border: none;
-            font-weight: 500;
-            text-decoration: none !important;
-        }
-        .content {
-            max-width: 800px;
-            margin: 50px auto;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
-        }
-        .title {
-            font-size: 2.5rem;
-            color: #ffd700;
-            text-shadow: 0 0 20px #ffd700, 0 0 40px #ffd700;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .subtitle {
-            font-size: 1.5rem;
-            color: #ffd700;
-            text-shadow: 0 0 20px #ffd700, 0 0 40px #ffd700;
-            margin: 30px 0 10px 0;
-        }
-        p {
-            line-height: 1.6;
-            margin-bottom: 15px;
-        }
-        .emoji {
-            font-size: 1.5rem;
-            margin-right: 10px;
-        }
-        .cta {
-            text-align: center;
-            margin-top: 30px;
-        }
-        .cta a {
-            display: inline-block;
-            padding: 15px 30px;
-            background: linear-gradient(45deg, #28a745, #20c997);
-            color: white;
-            text-decoration: none;
-            border-radius: 25px;
-            font-weight: bold;
-            transition: all 0.3s;
-        }
-        .cta a:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
-        }
-        footer {
-            background: rgba(255, 255, 255, 0.1);
-            color: #ffd700;
-            text-shadow: 0 0 20px #ffd700, 0 0 40px #ffd700;
-            padding: 20px 0;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            z-index: 10;
-            text-align: center;
-        }
-        .support {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            background: linear-gradient(45deg, #28a745, #20c997);
-            padding: 10px;
-            border-radius: 5px;
-            border: none;
-            transition: all 0.3s;
-        }
-        .support:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
-        }
-        main {
-            padding-bottom: 120px;
-        }
-    </style>
-</head>
-<body>
-    <header class="bg-white shadow-sm">
-        <nav class="navbar navbar-expand-lg navbar-light">
-            <div class="container">
-                <a class="navbar-brand" href="/">PlayTrade</a>
-                <ul class="nav nav-tabs">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/">Главная</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="/about/">О нас</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/docs/">Документация</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-    </header>
 
-    <main class="content">
-        <h1 class="title">🎮 ИГРАЙ НА ПОЛНУЮ КАТУШКУ — НАЙДИ СВОЮ ИГРУ НА [PLAYTRADE]!</h1>
-        <p>📖 <strong>ОСНОВНОЙ ТЕКСТ:</strong></p>
-        <p>Погрузись в мир безграничных возможностей с [PlayTrade] — твоим главным проводником в мире компьютерных игр! У нас собрана самая горячая коллекция цифровых и box-версий игр для PC: от легендарных хитов прошлого до громких премьер этого года. Ищете экшен, который заставит сердце биться чаще? Стратегию, которая проверит ваш интеллект? Или уютный инди-проект, чтобы отдохнуть после долгого дня? Вы нашли идеальное место.</p>
+{% block title %}О нас - PlayTrade{% endblock %}
+{% block meta_description %}PlayTrade - ваш проводник в мире игр. Узнайте больше о нашей платформе для покупки и продажи игр.{% endblock %}
+{% block body_class %}animated-bg{% endblock %}
 
-        <h2 class="subtitle">🔥 БОЛЬШЕ, ЧЕМ ПРОСТО МАГАЗИН — ЭТО ВСЕЛЕННАЯ ВЫГОДЫ</h2>
-        <p>Мы не просто продаём игры — мы строим сообщество. На нашей уникальной площадке вы можете как купить лицензионный ключ по самой привлекательной цене, так и продать ненужный! Устали от игры, прошли её или хотите обновить библиотеку? Выставьте свой ключ на витрину и верните часть инвестиций. Это умно, экономично и по-настоящему экологично для вашего игрового бюджета.</p>
+{% block main_class %}content-wrapper{% endblock %}
 
-        <h2 class="subtitle">🛡️ ПОКУПАЙТЕ БЕЗ СТРАХА — МЫ ГАРАНТИРУЕМ БЕЗОПАСНОСТЬ</h2>
-        <p>Ваше спокойствие — наш главный приоритет. Каждая сделка на [PlayTrade] защищена многоступенчатой системой безопасности:</p>
-        <ul>
-            <li>• Escrow-сервис: Ваши деньги замораживаются до момента, пока вы не активируете и не проверите ключ.</li>
-            <li>• Автоматическая проверка: Все ключи проходят первичную валидацию перед публикацией.</li>
-            <li>• Гарантия подлинности: Если ключ окажется нерабочим, мы вернём вам деньги в полном объёме в течение 24 часов.</li>
-            <li>• Проверенные продавцы: Система рейтингов и отзывов поможет выбрать самого надёжного партнёра.</li>
-        </ul>
+{% block content %}
+<article class="glass-card p-6">
+    <h1 class="title-gold text-center mb-6">
+        🎮 ИГРАЙ НА ПОЛНУЮ — НАЙДИ СВОЮ ИГРУ НА PLAYTRADE!
+    </h1>
 
-        <h2 class="subtitle">⚡ МГНОВЕННАЯ ДОСТАВКА — ИГРАЙТЕ УЖЕ ЧЕРЕЗ 20 СЕКУНД</h2>
-        <p>Забудьте о неделях ожидания посылки! Цифровые ключи активируются моментально. Просто выберите игру, оплатите удобным способом (картой, электронными кошельками, криптовалютой) и получите ключ в личном кабинете, на почту или в Telegram-боте. Скачивайте и играйте — пока не стемнело (а потом можно и при свете монитора)!</p>
+    <section class="mb-6">
+        <p class="text-white" style="font-size: 1.1rem; line-height: 1.8;">
+            Погрузись в мир безграничных возможностей с <strong class="text-gold">PlayTrade</strong> — твоим главным проводником в мире компьютерных игр! У нас собрана самая горячая коллекция цифровых и box-версий игр для PC: от легендарных хитов прошлого до громких премьер этого года.
+        </p>
+    </section>
 
-        <h2 class="subtitle">💰 ЦЕНЫ, ОТ КОТОРЫХ ПЕРЕХВАТЫВАЕТ ДУХ</h2>
-        <p>Благодаря гибкой рыночной модели и прямой работе с издателями мы предлагаем цены на 15-70% ниже, чем в стандартных онлайн-магазинах. Система умных уведомлений сообщит вам, когда игра из вашего wishlist’а упадёт в цене. А ещё у нас регулярные распродажи, скидки для постоянных клиентов и выгодные бонусные программы.</p>
+    <section class="mb-6">
+        <h2 class="title-gold mb-4" style="font-size: 1.5rem;">🔥 Больше, чем просто магазин</h2>
+        <p class="text-white" style="line-height: 1.8;">
+            Мы не просто продаём игры — мы строим сообщество. На нашей уникальной площадке вы можете как купить лицензионный ключ по самой привлекательной цене, так и продать ненужный! Устали от игры, прошли её или хотите обновить библиотеку? Выставьте свой ключ на витрину и верните часть инвестиций.
+        </p>
+    </section>
 
-        <h2 class="subtitle">🌐 ВСЕ ЖАНРЫ, ВСЕ ПЛАТФОРМЫ, ВСЕ ЯЗЫКИ</h2>
-        <p>Наша библиотека — это десятки тысяч тайтлов:</p>
-        <ul>
-            <li>• Горячие новинки и пре-ордеры (получите игру раньше всех с эксклюзивными бонусами!).</li>
-            <li>• Культовые блокбастеры (Cyberpunk 2077, Elden Ring, Baldur's Gate 3).</li>
-            <li>• Бессмертная классика и ремастеры.</li>
-            <li>• Самобытные инди-игры (Hollow Knight, Stardew Valley, Hades).</li>
-            <li>• Подписки (Xbox Game Pass, EA Play) и подарочные карты (Steam, PlayStation Store).</li>
-        </ul>
-        <p>Все ключи официальные, с поддержкой русского языка (где это предусмотрено издателем) и полной совместимостью с платформами: Steam, Epic Games Store, GOG, Origin, Uplay.</p>
-
-        <h2 class="subtitle">👨‍💻 МЫ РЯДОМ — ПОДДЕРЖКА, КОТОРАЯ ДЕЙСТВИТЕЛЬНО РАБОТАЕТ</h2>
-        <p>Наша служба заботы о клиентах — не робот, а живые люди, такие же фанаты игр, как и вы. Мы на связи 24/7 в онлайн-чате и по почте, чтобы помочь с выбором, решить проблему с активацией или просто дать совет по прохождению сложного уровня. Для нас вы — не просто номер заказа, а часть нашего игрового братства.</p>
-
-
-        <p><em>P.S. А ещё у нас есть раздел блога с гайдами, обзорами и секретными пасхалками. Загляните — и ваша игровая эрудиция взлетит до небес!</em></p>
-        <p><strong>PlayTrade. Играйте с умом. Экономьте с удовольствием. 🚀</strong></p>
-        <div class="cta">
-            <a href="/catalog/">👉 ЗАРЕГИСТРИРОВАТЬСЯ ЗА 30 СЕКУНД!</a>
+    <section class="mb-6">
+        <h2 class="title-gold mb-4" style="font-size: 1.5rem;">🛡️ Безопасность гарантирована</h2>
+        <div class="glass-card-dark p-4">
+            <ul class="text-white" style="line-height: 2;">
+                <li><strong class="text-gold">Escrow-сервис:</strong> Ваши деньги защищены до момента активации ключа</li>
+                <li><strong class="text-gold">Автоматическая проверка:</strong> Все ключи проходят валидацию перед публикацией</li>
+                <li><strong class="text-gold">Гарантия подлинности:</strong> Полный возврат средств за нерабочий ключ в течение 24 часов</li>
+                <li><strong class="text-gold">Рейтинг продавцов:</strong> Система отзывов поможет выбрать надёжного партнёра</li>
+            </ul>
         </div>
-    </main>
+    </section>
 
-    <footer>
-    </footer>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+    <section class="mb-6">
+        <h2 class="title-gold mb-4" style="font-size: 1.5rem;">⚡ Мгновенная доставка</h2>
+        <p class="text-white" style="line-height: 1.8;">
+            Забудьте о неделях ожидания! Цифровые ключи активируются моментально. Выберите игру, оплатите удобным способом и получите ключ мгновенно. <strong>Скачивайте и играйте уже через 20 секунд!</strong>
+        </p>
+    </section>
+
+    <section class="mb-6">
+        <h2 class="title-gold mb-4" style="font-size: 1.5rem;">💰 Невероятные цены</h2>
+        <p class="text-white" style="line-height: 1.8;">
+            Благодаря гибкой рыночной модели мы предлагаем цены на <strong class="text-gold">15-70% ниже</strong>, чем в стандартных магазинах. Регулярные распродажи, скидки для постоянных клиентов и бонусные программы!
+        </p>
+    </section>
+
+    <section class="mb-6">
+        <h2 class="title-gold mb-4" style="font-size: 1.5rem;">🌐 Огромный выбор</h2>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <div class="glass-card-dark p-3 h-100">
+                    <span style="font-size: 2rem;">🔥</span>
+                    <h5 class="text-gold mt-2 mb-1">Новинки и пре-ордеры</h5>
+                    <p class="text-white mb-0" style="font-size: 0.9rem;">Получите игру раньше всех с эксклюзивными бонусами</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="glass-card-dark p-3 h-100">
+                    <span style="font-size: 2rem;">🏆</span>
+                    <h5 class="text-gold mt-2 mb-1">Блокбастеры</h5>
+                    <p class="text-white mb-0" style="font-size: 0.9rem;">Cyberpunk 2077, Elden Ring, Baldur's Gate 3 и многое другое</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="glass-card-dark p-3 h-100">
+                    <span style="font-size: 2rem;">🎨</span>
+                    <h5 class="text-gold mt-2 mb-1">Инди-игры</h5>
+                    <p class="text-white mb-0" style="font-size: 0.9rem;">Hollow Knight, Stardew Valley, Hades и тысячи других</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="glass-card-dark p-3 h-100">
+                    <span style="font-size: 2rem;">🎁</span>
+                    <h5 class="text-gold mt-2 mb-1">Подписки и карты</h5>
+                    <p class="text-white mb-0" style="font-size: 0.9rem;">Xbox Game Pass, EA Play, Steam, PlayStation Store</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="mb-6">
+        <h2 class="title-gold mb-4" style="font-size: 1.5rem;">👨‍💻 Поддержка 24/7</h2>
+        <p class="text-white" style="line-height: 1.8;">
+            Наша команда — живые люди, такие же фанаты игр, как и вы. Мы на связи круглосуточно в онлайн-чате, чтобы помочь с выбором, решить проблему с активацией или просто дать совет по прохождению.
+        </p>
+    </section>
+
+    <section class="text-center glass-card-dark p-6">
+        <p class="text-gold" style="font-size: 1.3rem; font-weight: bold; margin-bottom: 16px;">
+            PlayTrade. Играйте с умом. Экономьте с удовольствием. 🚀
+        </p>
+        <a href="{% url 'catalog' %}" class="btn btn-primary btn-lg">
+            👉 Начать покупки
+        </a>
+    </section>
+</article>
+{% endblock %}
+
+{% block footer %}{% endblock %}

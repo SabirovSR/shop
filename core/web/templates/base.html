@@ -1,0 +1,148 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{% block meta_description %}PlayTrade - Магазин игр. Покупайте и продавайте игры с удобством и безопасностью.{% endblock %}">
+    <title>{% block title %}PlayTrade{% endblock %}</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'web/css/main.css' %}">
+    
+    <!-- Google Fonts (optional - fallback to system fonts) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="{% block body_class %}{% endblock %}"
+    {% if request.session.user_id %}data-user-id="{{ request.session.user_id }}"{% endif %}
+    data-user-type="{{ user_type|default:'guest' }}">
+
+    {% csrf_token %}
+    
+    <!-- Navigation -->
+    {% block navbar %}
+    <nav class="navbar">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <span class="text-gradient-gold">PlayTrade</span>
+            </a>
+            
+            <ul class="nav-tabs d-none d-md-flex">
+                {% block nav_items %}
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'catalog' %}active{% endif %}" href="{% url 'catalog' %}">Каталог</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'docs' %}active{% endif %}" href="{% url 'docs' %}">Документация</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}" href="{% url 'about' %}">О нас</a>
+                </li>
+                {% endblock %}
+            </ul>
+            
+            <div class="navbar-actions">
+                {% block navbar_actions %}
+                {% if user_type == 'buy' or user_type == 'sell' %}
+                    <a href="{% url 'account' %}" class="btn btn-outline-gold btn-sm d-flex align-center gap-2">
+                        {% if user.avatar %}
+                            <img src="{{ user.avatar.url }}" alt="" style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover;">
+                        {% else %}
+                            👤
+                        {% endif %}
+                        Аккаунт
+                    </a>
+                    {% if user_type == 'buy' %}
+                        <a href="{% url 'cart' %}" class="btn btn-primary btn-sm">🛒 Корзина</a>
+                    {% elif user_type == 'sell' %}
+                        <a href="{% url 'add_game' %}" class="btn btn-success btn-sm">➕ Добавить</a>
+                    {% endif %}
+                {% else %}
+                    <a href="{% url 'register' %}" class="btn btn-primary btn-sm">Вход</a>
+                {% endif %}
+                {% endblock %}
+            </div>
+        </div>
+    </nav>
+    {% endblock %}
+    
+    <!-- Messages/Alerts -->
+    {% if messages %}
+    <div class="container mt-4">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags|default:'info' }} animate-fade-in" role="alert">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    <!-- Main Content -->
+    <main class="{% block main_class %}{% endblock %}">
+        {% block content %}{% endblock %}
+    </main>
+    
+    <!-- Footer -->
+    {% block footer %}
+    <footer class="footer mt-auto">
+        <div class="container">
+            <p class="mb-2">&copy; {% now "Y" %} PlayTrade. Все права защищены.</p>
+            <p class="mb-2">Контакты: info@playtrade.com | +7 (999) 123-45-67</p>
+            <p class="mb-0"><small>Версия 2.0 | Обновлено: {% now "d.m.Y" %}</small></p>
+        </div>
+    </footer>
+    {% endblock %}
+    
+    <!-- Support Button -->
+    {% block support_button %}
+    <a href="{% url 'support_chat' %}" class="support-btn" title="Чат с поддержкой">
+        💬 Поддержка
+    </a>
+    {% endblock %}
+    
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Common JavaScript -->
+    <script>
+        // Auto-hide messages after 4 seconds
+        document.addEventListener('DOMContentLoaded', function() {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(function(alert) {
+                setTimeout(function() {
+                    alert.style.opacity = '0';
+                    alert.style.transition = 'opacity 0.5s ease';
+                    setTimeout(function() {
+                        alert.remove();
+                    }, 500);
+                }, 4000);
+            });
+        });
+        
+        // CSRF token helper for AJAX
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        const csrftoken = getCookie('csrftoken');
+    </script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

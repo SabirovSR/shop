@@ -1,247 +1,139 @@
+{% extends 'base.html' %}
 {% load static %}
-<!-- Шаблон страницы покупки игр -->
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Купить игры - PlayTrade</title>
-    <link href="https://share.google/m8Z4fEOpFC085bDxg" rel="stylesheet">
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(45deg, #667eea, #764ba2, #a044ff, #6c5ce7);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
-        }
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        .navbar {
-            background: rgba(255, 255, 255, 0.1) !important;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        .navbar .container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .navbar-brand {
-            font-weight: bold;
-            color: #ffd700 !important;
-            text-shadow: 0 0 20px #ffd700, 0 0 40px #ffd700;
-            margin-right: 2rem;
-            font-size: 1.5rem;
-            text-decoration: none !important;
-        }
-        .nav-tabs {
-            display: flex;
-            gap: 2rem;
-        }
-        .nav-tabs li {
-            list-style: disc;
-            color: black;
-        }
-        .nav-tabs .nav-link {
-            color: #ffd700;
-            text-shadow: 0 0 20px #ffd700, 0 0 40px #ffd700;
-            border: none;
-            font-weight: 500;
-            font-size: 1.5rem;
-            text-decoration: none !important;
-        }
-        .content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 2;
-            text-align: center;
-            color: white;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
-        }
-        .register-form {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
-            max-width: 400px;
-            margin: 0 auto;
-        }
-        .register-form h2 {
-            color: #ffd700;
-            text-shadow: 0 0 20px #ffd700, 0 0 40px #ffd700;
-            margin-bottom: 20px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .form-group label {
-            display: block;
-            color: white;
-            margin-bottom: 5px;
-        }
-        .form-group input {
-            width: 100%;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-        }
-        .form-group input::placeholder {
-            color: rgba(255, 255, 255, 0.7);
-        }
-        .btn {
-            padding: 15px 30px;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: bold;
-            color: white;
-            background: linear-gradient(45deg, #28a745, #20c997);
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 1.2rem;
-        }
-        .btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
-        }
-        .messages {
-            background: rgba(255, 255, 255, 0.9);
-            color: green;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        footer {
-            background: rgba(255, 255, 255, 0.1);
-            color: #ffd700;
-            text-shadow: 0 0 20px #ffd700, 0 0 40px #ffd700;
-            padding: 20px 0;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            z-index: 10;
-            text-align: center;
-        }
-        .support {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            background: linear-gradient(45deg, #28a745, #20c997);
-            padding: 10px;
-            border-radius: 5px;
-            border: none;
-            transition: all 0.3s;
-        }
-        .support:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
-        }
-    </style>
-</head>
-<body>
-    <header class="bg-white shadow-sm">
-        <nav class="navbar navbar-expand-lg navbar-light">
-            <div class="container">
-                <a class="navbar-brand" href="/">PlayTrade</a>
-                <ul class="nav nav-tabs">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/">Главная</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/docs/">Документация</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-    </header>
 
-    <main class="content">
-        {% if messages %}
-            <div class="messages">
-                {% for message in messages %}
-                    <p>{{ message }}</p>
-                {% endfor %}
-            </div>
-        {% endif %}
-        <div class="register-form" id="register-form">
-            <h2>Регистрация для {% if user_type == 'buy' %}покупки{% else %}продажи{% endif %} игр</h2>
+{% block title %}{% if user_type == 'buy' %}Купить игры{% else %}Выложить игры{% endif %} - PlayTrade{% endblock %}
+
+{% block navbar %}{% endblock %}
+{% block footer %}{% endblock %}
+{% block support_button %}{% endblock %}
+
+{% block content %}
+<div class="d-flex align-center justify-center" style="min-height: 100vh; padding: 20px;">
+    <div class="glass-card p-6" style="max-width: 450px; width: 100%;">
+        <!-- Logo -->
+        <div class="text-center mb-4">
+            <a href="/" class="text-decoration-none">
+                <h2 class="title-gold">🎮 PlayTrade</h2>
+            </a>
+        </div>
+
+        <!-- Registration Form -->
+        <div id="register-form">
+            <h3 class="text-white text-center mb-4">
+                Регистрация для {% if user_type == 'buy' %}покупки{% else %}продажи{% endif %} игр
+            </h3>
+            
             <form method="post">
                 {% csrf_token %}
                 <div class="form-group">
-                    <label for="username">Имя пользователя</label>
-                    <input type="text" id="username" name="username" placeholder="Введите имя пользователя" required>
+                    <label for="username" class="text-white mb-2 d-block">Имя пользователя</label>
+                    <input type="text" id="username" name="username" class="form-control" placeholder="Введите имя пользователя" required>
                 </div>
+                
                 <div class="form-group">
-                    <label for="password">Пароль</label>
-                    <input type="password" id="password" name="password" placeholder="Введите пароль" required>
+                    <label for="password" class="text-white mb-2 d-block">Пароль</label>
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Введите пароль" required>
                 </div>
+                
                 <div class="form-group">
-                    <label for="confirm_password">Подтвердите пароль</label>
-                    <input type="password" id="confirm_password" name="confirm_password" placeholder="Подтвердите пароль" required>
+                    <label for="confirm_password" class="text-white mb-2 d-block">Подтвердите пароль</label>
+                    <input type="password" id="confirm_password" name="confirm_password" class="form-control" placeholder="Подтвердите пароль" required>
                 </div>
+                
                 <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" placeholder="Введите email" required>
+                    <label for="email" class="text-white mb-2 d-block">Email</label>
+                    <input type="email" id="email" name="email" class="form-control" placeholder="Введите email" required>
                 </div>
+                
                 <div class="form-group">
-                    <label for="phone">Номер телефона</label>
-                    <input type="tel" id="phone" name="phone" placeholder="Введите номер телефона" required>
+                    <label for="phone" class="text-white mb-2 d-block">Номер телефона</label>
+                    <input type="tel" id="phone" name="phone" class="form-control" placeholder="+7 (999) 123-45-67" required>
                 </div>
+                
                 {% if user_type == 'sell' %}
                 <div class="form-group">
-                    <label for="audience">Укажите целевую аудиторию</label>
-                    <input type="text" id="audience" name="audience" placeholder="Например: 18-35 лет">
+                    <label for="audience" class="text-white mb-2 d-block">Целевая аудитория</label>
+                    <input type="text" id="audience" name="audience" class="form-control" placeholder="Например: 18-35 лет">
                 </div>
                 {% endif %}
-                <button type="submit" class="btn">Зарегистрироваться</button>
+                
+                <button type="submit" class="btn btn-success btn-block btn-lg mt-4">
+                    ✨ Зарегистрироваться
+                </button>
             </form>
-            <button id="existing" class="btn" style="margin-top: 10px; background: #007bff;">У меня уже есть аккаунт</button>
+            
+            <button id="existing" class="btn btn-primary btn-block mt-3">
+                У меня уже есть аккаунт
+            </button>
         </div>
-        <div class="register-form" id="login-form" style="display: none;">
-            <h2>Вход для {% if user_type == 'buy' %}покупки{% else %}продажи{% endif %} игр</h2>
+
+        <!-- Login Form -->
+        <div id="login-form" style="display: none;">
+            <h3 class="text-white text-center mb-4">
+                Вход для {% if user_type == 'buy' %}покупки{% else %}продажи{% endif %} игр
+            </h3>
+            
             <form method="post">
                 {% csrf_token %}
                 <div class="form-group">
-                    <label for="login_username">Имя пользователя</label>
-                    <input type="text" id="login_username" name="login_username" placeholder="Введите имя пользователя" required>
+                    <label for="login_username" class="text-white mb-2 d-block">Имя пользователя</label>
+                    <input type="text" id="login_username" name="login_username" class="form-control" placeholder="Введите имя пользователя" required>
                 </div>
+                
                 <div class="form-group">
-                    <label for="login_password">Пароль</label>
-                    <input type="password" id="login_password" name="login_password" placeholder="Введите пароль" required>
+                    <label for="login_password" class="text-white mb-2 d-block">Пароль</label>
+                    <input type="password" id="login_password" name="login_password" class="form-control" placeholder="Введите пароль" required>
                 </div>
-                <button type="submit" class="btn">Войти</button>
+                
+                <button type="submit" class="btn btn-success btn-block btn-lg mt-4">
+                    🔓 Войти
+                </button>
             </form>
-            <button id="back" class="btn" style="margin-top: 10px; background: #28a745;">Назад к регистрации</button>
+            
+            <button id="back" class="btn btn-secondary btn-block mt-3">
+                ← Назад к регистрации
+            </button>
         </div>
-    </main>
 
-    <footer>
-    </footer>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        document.getElementById('existing').addEventListener('click', function(e) {
-            e.preventDefault();
-            document.getElementById('register-form').style.display = 'none';
-            document.getElementById('login-form').style.display = 'block';
-        });
-        document.getElementById('back').addEventListener('click', function(e) {
-            e.preventDefault();
-            document.getElementById('login-form').style.display = 'none';
-            document.getElementById('register-form').style.display = 'block';
-        });
-    </script>
-</body>
-</html>
+        <!-- Navigation Links -->
+        <div class="glass-card-dark p-3 mt-4 text-center">
+            <a href="/" class="text-gold">🏠 Главная</a>
+            <span class="text-white mx-2">|</span>
+            <a href="/docs/" class="text-gold">📚 Документация</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.getElementById('existing').addEventListener('click', function(e) {
+    e.preventDefault();
+    document.getElementById('register-form').style.display = 'none';
+    document.getElementById('login-form').style.display = 'block';
+});
+
+document.getElementById('back').addEventListener('click', function(e) {
+    e.preventDefault();
+    document.getElementById('login-form').style.display = 'none';
+    document.getElementById('register-form').style.display = 'block';
+});
+
+// Phone number formatting
+document.getElementById('phone')?.addEventListener('input', function(e) {
+    let value = e.target.value.replace(/\D/g, '');
+    if (value.length > 0) {
+        if (value[0] === '8') value = '7' + value.slice(1);
+        if (value[0] !== '7') value = '7' + value;
+        
+        let formatted = '+7';
+        if (value.length > 1) formatted += ' (' + value.slice(1, 4);
+        if (value.length > 4) formatted += ') ' + value.slice(4, 7);
+        if (value.length > 7) formatted += '-' + value.slice(7, 9);
+        if (value.length > 9) formatted += '-' + value.slice(9, 11);
+        
+        e.target.value = formatted;
+    }
+});
+</script>
+{% endblock %}

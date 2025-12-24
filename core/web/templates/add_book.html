@@ -1,203 +1,64 @@
-<!-- Шаблон страницы добавления книги -->
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Добавить книгу</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .messages {
-            list-style: none;
-            padding: 0;
-            margin-bottom: 20px;
-        }
-        .messages li {
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 10px;
-        }
-        .success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-        .error {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-        .dark-select-wrapper {
-            position: relative;
-            width: 100%;
-        }
+{% extends 'base.html' %}
+{% load static %}
 
-        .dark-select {
-            width: 100%;
-            padding: 12px 40px 12px 15px;
-            background: #1a1a2e;
-            color: white;
-            border: 2px solid #0f3460;
-            border-radius: 8px;
-            font-size: 16px;
-            appearance: none;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
+{% block title %}Добавить книгу - PlayTrade{% endblock %}
 
-        .dark-select:focus {
-            border-color: #e94560;
-            box-shadow: 0 0 0 3px rgba(233, 69, 96, 0.3);
-            outline: none;
-        }
-
-        .dark-select option {
-            background: #1a1a2e;
-            color: white;
-            padding: 10px;
-        }
-
-        .select-arrow {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: white;
-            pointer-events: none;
-            font-size: 12px;
-        }
-
-
-        /* Кастомный скроллбар */
-        .dark-select::-webkit-scrollbar {
-            width: 10px;
-        }
-
-        .dark-select::-webkit-scrollbar-track {
-            background: #0f3460;
-            border-radius: 5px;
-        }
-
-        .dark-select::-webkit-scrollbar-thumb {
-            background: #e94560;
-            border-radius: 5px;
-        }
-
-        .dark-select::-webkit-scrollbar-thumb:hover {
-            background: #ff6b9d;
-        }
-    </style>
-</head>
-<body class="bg-light">
-    <header class="bg-white shadow-sm">
-        <nav class="navbar navbar-expand-lg navbar-light">
-            <div class="container">
-                <a class="navbar-brand" href="/">Библиотека книг</a>
-                <ul class="nav nav-tabs ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/">Главная</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="/add-book/">Добавить книгу</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/add-author/">Добавить автора</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/docs/">Документация</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/admin/">Админ</a>
-                    </li>
-                </ul>
+{% block content %}
+<div class="container" style="max-width: 600px; margin: 50px auto;">
+    <div class="glass-card p-6">
+        <h1 class="title-gold text-center mb-6">📚 Добавить книгу</h1>
+        
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="title" class="text-white mb-2 d-block">Название книги</label>
+                <input type="text" id="title" name="title" class="form-control" placeholder="Введите название книги" required>
             </div>
-        </nav>
-    </header>
-
-    <main class="container my-5">
-        <div class="row justify-content-center">
-            <div class="col-md-8 col-lg-6">
-                <div class="card shadow">
-                    <div class="card-header bg-primary text-white">
-                        <h1 class="h4 mb-0">Добавить книгу</h1>
-                    </div>
-                    <div class="card-body">
-                        {% if messages %}
-                            {% for message in messages %}
-                                <div class="alert alert-{% if message.tags == 'success' %}success{% else %}danger{% endif %} alert-dismissible fade show" role="alert">
-                                    {{ message }}
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                                </div>
-                            {% endfor %}
-                        {% endif %}
-
-                        <form method="post">
-                            {% csrf_token %}
-                            <div class="mb-3">
-                                <label for="title" class="form-label">Название книги:</label>
-                                <input type="text" id="title" name="title" class="form-control" required>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="author" class="form-label">Автор:</label>
-                                <div class="dark-select-wrapper">
-                                    <select id="author" name="author" class="dark-select" required>
-                                        <option value="">Выберите автора</option>
-                                        {% for author in authors %}
-                                            <option value="{{ author.id }}">{{ author.name }}</option>
-                                        {% endfor %}
-                                    </select>
-                                    <div class="select-arrow">▼</div>
-                                    <div class="select-arrow">▼</div>
-                                </div>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="category" class="form-label">Категория:</label>
-                                <div class="dark-select-wrapper">
-                                    <select id="category" name="category" class="dark-select">
-                                        <option value="">Выберите категорию</option>
-                                        {% for category in categories %}
-                                            <option value="{{ category.id }}">{{ category.name }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="published_date" class="form-label">Дата публикации:</label>
-                                <input type="date" id="published_date" name="published_date" class="form-control" required>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="price" class="form-label">Цена:</label>
-                                <input type="number" id="price" name="price" step="0.01" class="form-control" required>
-                            </div>
-
-                            <div class="mb-3 form-check">
-                                <input type="checkbox" id="in_stock" name="in_stock" class="form-check-input" checked>
-                                <label for="in_stock" class="form-check-label">В наличии</label>
-                            </div>
-
-                            <div class="d-grid">
-                                <button type="submit" class="btn btn-success">Добавить книгу</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
-                <div class="text-center mt-3">
-                    <a href="/" class="btn btn-outline-secondary">Вернуться к списку книг</a>
-                </div>
+            
+            <div class="form-group">
+                <label for="author" class="text-white mb-2 d-block">Автор</label>
+                <select id="author" name="author" class="form-control" required>
+                    <option value="">Выберите автора</option>
+                    {% for author in authors %}
+                        <option value="{{ author.id }}">{{ author.name }}</option>
+                    {% endfor %}
+                </select>
             </div>
+            
+            <div class="form-group">
+                <label for="category" class="text-white mb-2 d-block">Категория</label>
+                <select id="category" name="category" class="form-control">
+                    <option value="">Выберите категорию</option>
+                    {% for category in categories %}
+                        <option value="{{ category.id }}">{{ category.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="published_date" class="text-white mb-2 d-block">Дата публикации</label>
+                <input type="date" id="published_date" name="published_date" class="form-control" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="price" class="text-white mb-2 d-block">Цена (₽)</label>
+                <input type="number" id="price" name="price" step="0.01" class="form-control" placeholder="0.00" required>
+            </div>
+            
+            <div class="form-group d-flex align-center gap-2 mt-4">
+                <input type="checkbox" id="in_stock" name="in_stock" checked style="width: 20px; height: 20px;">
+                <label for="in_stock" class="text-white mb-0">В наличии</label>
+            </div>
+            
+            <button type="submit" class="btn btn-success btn-block btn-lg mt-4">
+                ✅ Добавить книгу
+            </button>
+        </form>
+        
+        <div class="text-center mt-4">
+            <a href="/" class="btn btn-outline-light">← Вернуться на главную</a>
         </div>
-    </main>
-
-    <footer class="bg-dark text-light text-center py-3">
-        <div class="container">
-            <p class="mb-0">&copy; 2025 Библиотека книг. Все права защищены.</p>
-        </div>
-    </footer>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+    </div>
+</div>
+{% endblock %}
